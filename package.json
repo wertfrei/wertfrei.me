@@ -1,0 +1,40 @@
+{
+  "name": "census",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html",
+    "lint": "eslint . --cache --ext .js,.jsx,.ts,.tsx && prettier --check \"./*.{js,jsx,ts,tsx,html}\" \"./**/*.{js,jsx,ts,tsx,html}\"",
+    "format": "eslint . --cache --ext .js,.jsx,.ts,.tsx --fix && prettier --write \"./*.{js,jsx,ts,tsx,html}\" \"./**/*.{js,jsx,ts,tsx,html}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MathisBullinger/census.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MathisBullinger/census/issues"
+  },
+  "homepage": "https://github.com/MathisBullinger/census#readme",
+  "dependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.12.0",
+    "@typescript-eslint/parser": "^2.12.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.7.2",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "parcel-bundler": "^1.12.4",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.4"
+  }
+}
