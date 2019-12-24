@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html",
+    "build": "parcel build index.html --out-dir public",
     "lint": "eslint . --cache --ext .js,.jsx,.ts,.tsx && prettier --check \"./*.{js,jsx,ts,tsx,html}\" \"./**/*.{js,jsx,ts,tsx,html}\"",
     "format": "eslint . --cache --ext .js,.jsx,.ts,.tsx --fix && prettier --write \"./*.{js,jsx,ts,tsx,html}\" \"./**/*.{js,jsx,ts,tsx,html}\""
   },
