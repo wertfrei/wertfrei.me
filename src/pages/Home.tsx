@@ -8,7 +8,7 @@ import Menu from '../components/Menu'
 const slides = [
   'Bist du glücklich?',
   'Trägst du Tattoos?',
-  'Welche Sprache sprichst du?',
+  'Welche Sprachen sprichst du?',
 ]
 
 export default function Home() {
