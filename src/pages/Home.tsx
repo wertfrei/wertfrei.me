@@ -1,15 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
+import Slide from './Home/Slide'
+import Canvas from './Home/Canvas'
+
+const slides = ['a', 'b', 'c']
 
 export default function Home() {
-  return <S.Home />
+  return (
+    <S.Home>
+      {slides.map(title => (
+        <Slide title={title} key={title} />
+      ))}
+      <Canvas />
+    </S.Home>
+  )
 }
 
 const S = {
-  Home: styled.div`
-    display: block;
-    width: 100vw;
-    height: 100vh;
-    background: yellow;
-  `,
+  Home: styled.div``,
 }
