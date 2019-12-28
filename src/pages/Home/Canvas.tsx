@@ -9,16 +9,11 @@ interface Props {
 export default function Canvas({ slide }: Props) {
   const ref = useRef<HTMLCanvasElement>()
   const render = useRender(ref)
-  const [activeSlide, setActiveSlide] = useState(slide)
-  const [width, height] = useCanvasSize(ref, (w, h) =>
-    render(w, h, activeSlide)
-  )
+  const [width, height] = useCanvasSize(ref)
 
   useEffect(() => {
-    if (slide === activeSlide) return
-    setActiveSlide(slide)
     render(width, height, slide)
-  }, [slide, activeSlide, render, width, height])
+  }, [slide, render, width, height])
 
   return <S.Canvas ref={ref} width={`${width}px`} height={`${height}px`} />
 }
@@ -30,6 +25,7 @@ function useRender(ref: MutableRefObject<HTMLCanvasElement>) {
     if (!ctx) return
     ctx.clearRect(0, 0, width, height)
     ctx.fillStyle = '#ff0739'
+    console.log('render', slide)
     if (slide === 'a')
       ctx.fillRect(width / 4, height / 4, width / 2, height / 2)
     else {

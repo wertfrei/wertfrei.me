@@ -26,7 +26,8 @@ function useActiveSlide() {
     const handleScroll = throttle(() => {
       const slide = (window.scrollY / window.innerHeight) | 0
       if (active !== slide) setActive(slide)
-    }, 1000 / 10)
+    }, 1000 / 30)
+
     window.addEventListener('scroll', handleScroll, {
       passive: true,
     })
