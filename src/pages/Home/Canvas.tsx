@@ -15,7 +15,11 @@ export default function Canvas({ slide }: Props) {
     render(width, height, slide)
   }, [slide, render, width, height])
 
-  return <S.Canvas ref={ref} width={`${width}px`} height={`${height}px`} />
+  return (
+    <S.Wrap>
+      <S.Canvas ref={ref} width={`${width}px`} height={`${height}px`} />
+    </S.Wrap>
+  )
 }
 
 function useRender(ref: MutableRefObject<HTMLCanvasElement>) {
@@ -54,12 +58,19 @@ function useRender(ref: MutableRefObject<HTMLCanvasElement>) {
 }
 
 const S = {
+  Wrap: styled.div`
+    position: absolute;
+    display: block;
+    top: 90vh;
+    z-index: -1;
+    width: 100vw;
+    height: 310vh;
+  `,
+
   Canvas: styled.canvas`
-    position: fixed;
+    position: sticky;
     top: 0;
-    left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1;
   `,
 }

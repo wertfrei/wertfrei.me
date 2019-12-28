@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import Intro from './Home/Intro'
 import Slide from './Home/Slide'
 import Canvas from './Home/Canvas'
 import throttle from 'lodash/throttle'
@@ -15,6 +15,7 @@ export default function Home() {
 
   return (
     <>
+      <Intro />
       {slides.map(title => (
         <Slide title={title} key={title} />
       ))}
@@ -32,7 +33,7 @@ function useActiveSlide() {
     const handleScroll = throttle(() => {
       const slide =
         ((root.scrollTop + window.innerHeight / 3) / window.innerHeight) | 0
-      if (active !== slide) setActive(slide)
+      if (active !== slide) setActive(slide - 1)
     }, 1000 / 30)
 
     root.addEventListener('scroll', handleScroll, {
@@ -42,5 +43,5 @@ function useActiveSlide() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return active || 0
+  return Math.max(active || 0, 0)
 }

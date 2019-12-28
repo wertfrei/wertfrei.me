@@ -5,6 +5,7 @@
   font-family: 'Futura', sans-serif;
   font-size: 14px;
   overflow-x: hidden;
+  --cl-red: #ff0739;
 }
 
 body {
@@ -17,4 +18,5 @@ body {
   height: 100vh;
   overflow-y: auto;
   scroll-snap-type: y mandatory;
+  position: relative;
 }
