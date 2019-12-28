@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import throttle from 'lodash/throttle'
 import Intro from './Home/Intro'
 import Slide from './Home/Slide'
 import Canvas from './Home/Canvas'
-import throttle from 'lodash/throttle'
+import Menu from '../components/Menu'
 
 const slides = [
   'Bist du glücklich?',
@@ -15,6 +16,7 @@ export default function Home() {
 
   return (
     <>
+      <Menu />
       <Intro />
       {slides.map(title => (
         <Slide title={title} key={title} />
