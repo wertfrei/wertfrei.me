@@ -14,4 +14,7 @@ body {
 
 #root {
   overflow: auto;
+  height: 100vh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
 }

@@ -18,12 +18,13 @@ const S = {
     display: block;
     height: 100vh;
     padding: 0 2rem;
-    position: relative;
+    scroll-snap-align: center;
 
     p {
-      position: absolute;
+      position: relative;
       top: 70%;
       font-size: 2rem;
+      text-transform: uppercase;
     }
   `,
 }

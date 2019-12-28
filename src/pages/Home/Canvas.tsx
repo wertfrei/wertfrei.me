@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useCanvasSize } from '../../utils/hooks'
 
 interface Props {
-  slide: string
+  slide: number
 }
 
 export default function Canvas({ slide }: Props) {
@@ -21,20 +21,28 @@ export default function Canvas({ slide }: Props) {
 function useRender(ref: MutableRefObject<HTMLCanvasElement>) {
   const [ctx, setCtx] = useState<CanvasRenderingContext2D>()
 
-  function render(width: number, height: number, slide: Props['slide'] = 'a') {
+  function render(width: number, height: number, slide: Props['slide'] = 0) {
     if (!ctx) return
     ctx.clearRect(0, 0, width, height)
     ctx.fillStyle = '#ff0739'
     console.log('render', slide)
-    if (slide === 'a')
-      ctx.fillRect(width / 4, height / 4, width / 2, height / 2)
-    else {
-      ctx.beginPath()
+    ctx.beginPath()
+    if (slide === 0) {
+      ctx.moveTo(0, height)
+      ctx.lineTo(0, (height / 4) * 3)
+      ctx.lineTo(width - width / 5, 0)
+      ctx.lineTo(width, 0)
+      ctx.lineTo(width, height)
+    } else if (slide === 1) {
+      ctx.moveTo(width / 2, height)
+      ctx.lineTo(width, height / 2)
+      ctx.lineTo(width, height)
+    } else {
       ctx.moveTo(width / 4, (height / 4) * 3)
       ctx.lineTo(width / 2, height / 4)
       ctx.lineTo((width / 4) * 3, (height / 4) * 3)
-      ctx.fill()
     }
+    ctx.fill()
   }
 
   useEffect(() => {
