@@ -2,21 +2,43 @@ import React, { useState, useRef, useEffect, MutableRefObject } from 'react'
 import styled from 'styled-components'
 import { useCanvasSize } from '../../utils/hooks'
 
-export default function Canvas() {
+interface Props {
+  slide: string
+}
+
+export default function Canvas({ slide }: Props) {
   const ref = useRef<HTMLCanvasElement>()
   const render = useRender(ref)
-  const [width, height] = useCanvasSize(ref, render)
+  const [activeSlide, setActiveSlide] = useState(slide)
+  const [width, height] = useCanvasSize(ref, (w, h) =>
+    render(w, h, activeSlide)
+  )
+
+  useEffect(() => {
+    if (slide === activeSlide) return
+    setActiveSlide(slide)
+    render(width, height, slide)
+  }, [slide, activeSlide, render, width, height])
 
   return <S.Canvas ref={ref} width={`${width}px`} height={`${height}px`} />
 }
 
 function useRender(ref: MutableRefObject<HTMLCanvasElement>) {
-  const [ctx, setCtx] = useState()
+  const [ctx, setCtx] = useState<CanvasRenderingContext2D>()
 
-  function render(width: number, height: number) {
+  function render(width: number, height: number, slide: Props['slide'] = 'a') {
     if (!ctx) return
-    ctx.fillStyle = 'red'
-    ctx.fillRect(width / 4, height / 4, width / 2, height / 2)
+    ctx.clearRect(0, 0, width, height)
+    ctx.fillStyle = '#ff0739'
+    if (slide === 'a')
+      ctx.fillRect(width / 4, height / 4, width / 2, height / 2)
+    else {
+      ctx.beginPath()
+      ctx.moveTo(width / 4, (height / 4) * 3)
+      ctx.lineTo(width / 2, height / 4)
+      ctx.lineTo((width / 4) * 3, (height / 4) * 3)
+      ctx.fill()
+    }
   }
 
   useEffect(() => {
