@@ -5,17 +5,70 @@ export default function Menu() {
   const [open, setOpen] = useState(false)
 
   return (
-    <S.Hamburger onClick={() => setOpen(!open)}>
-      <S.HamburgerBox>
-        <S.HamburgerInner data-state={open ? 'open' : 'closed'} />
-      </S.HamburgerBox>
-    </S.Hamburger>
+    <>
+      <S.Menu data-state={open ? 'open' : 'closed'}>
+        <ul>
+          <li>
+            <a>mach mit!</a>
+          </li>
+          <br />
+          <li>
+            <a>filteroptionen</a>
+          </li>
+          <br />
+          <li>
+            <a>datenschutz</a>
+          </li>
+          <li>
+            <a>impressum</a>
+          </li>
+        </ul>
+      </S.Menu>
+      <S.Hamburger onClick={() => setOpen(!open)}>
+        <S.HamburgerBox>
+          <S.HamburgerInner data-state={open ? 'open' : 'closed'} />
+        </S.HamburgerBox>
+      </S.Hamburger>
+    </>
   )
 }
 
 const S = {
+  Menu: styled.nav`
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    background-color: #fff;
+    clip-path: circle(10px at 50px 40px);
+    opacity: 0;
+    --trans-time: 0.5s;
+    transition: clip-path var(--trans-time) ease-in,
+      opacity 0s linear var(--trans-time);
+    will-change: clip-path;
+    padding: 10rem 2rem;
+
+    &[data-state='open'] {
+      clip-path: circle(150vmax at 50px 40px);
+      transition: clip-path var(--trans-time) ease;
+      opacity: 1;
+    }
+
+    ul {
+      font-size: 2rem;
+      text-transform: uppercase;
+      justify-content: space-between;
+
+      line-height: 3rem;
+    }
+  `,
+
   Hamburger: styled.button`
     position: fixed;
+    z-index: 1001;
     left: 1rem;
     top: 1rem;
     -moz-appearance: none;
@@ -25,6 +78,7 @@ const S = {
     display: inline-block;
     cursor: pointer;
     transition: opacity 0.15s;
+    background-color: transparent;
 
     &:focus {
       outline: none;
