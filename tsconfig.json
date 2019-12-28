@@ -10,7 +10,8 @@
     "paths": {
       "~/*": ["src/*"]
     },
-    "lib": ["dom", "webworker", "es2019"]
+    "lib": ["dom", "webworker", "es2019"],
+    "resolveJsonModule": true
   },
   "exclude": ["node_modules", "public"]
 }
