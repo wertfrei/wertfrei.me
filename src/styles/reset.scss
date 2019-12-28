@@ -1,0 +1,15 @@
+@import './reset-meyerweb';
+
+:root {
+  user-select: none
+}
+
+p, h1, h2, h3, h4, h5, h6, span, pre, address, 
+big, small, b, i, em, strong, del, ins sup, sub,
+blockquote, q, cite, code, var, samp {
+  user-select: inherit
+}
+
+div {
+  box-sizing: border-box;
+}
