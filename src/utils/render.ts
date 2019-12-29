@@ -63,8 +63,13 @@ function renderSingle(v: number, width: number, height: number): Polygon {
   }
   return polygon
 }
-export let polygons = []
 
+function renderRadar(values: number[], width: number, height: number): Polygon {
+  console.log(values)
+  return new Polygon()
+}
+
+export let polygons = []
 let lastSlide = 0
 const transition = {
   start: null,
@@ -94,7 +99,10 @@ export function useRender(
         requestAnimationFrame(() => render(width, height, slide))
       }
     } else {
-      if (performance.now() - transition.start >= transition.dur) {
+      if (
+        performance.now() - transition.start >= transition.dur ||
+        !('inter' in polygons[Math.min(transition.from, transition.to)])
+      ) {
         transition.start = null
         return render(width, height, slide)
       }
@@ -117,28 +125,22 @@ export function useRender(
     polygons = [
       renderSingle(slides[0].value, width, height),
       renderSingle(slides[1].value, width, height),
-      new Polygon([
-        [0.2 * width, 0.1 * height],
-        [0.55 * width, 0.5 * height],
-        [0.7 * width, 0.55 * height],
-        [0.5 * width, 0.9 * height],
-        [0.4 * width, 0.55 * height],
-        [0.48 * width, 0.5 * height],
-      ]),
+      renderRadar(Object.values(slides[2].values), width, height),
     ]
       .map(polygon => ({
         polygon,
       }))
       .map((p, i, polygons) => ({
         ...p,
-        ...(i < polygons.length - 1 && {
-          inter: interpolate(
-            ...[i, i + 1].map(i =>
-              polygons[i].polygon.vertices.map(({ x, y }) => [x, y])
+        ...(i < polygons.length - 1 &&
+          [i, i + 1].every(n => polygons[n].polygon.vertices.length) && {
+            inter: interpolate(
+              ...[i, i + 1].map(i =>
+                polygons[i].polygon.vertices.map(({ x, y }) => [x, y])
+              ),
+              { string: false }
             ),
-            { string: false }
-          ),
-        }),
+          }),
       }))
   }, [width, height])
 
