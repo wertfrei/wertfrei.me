@@ -74,12 +74,40 @@ function renderRadar(values: number[], width: number, height: number): Polygon {
   return new Polygon(vertices as [number, number][])
 }
 
+function renderArea(
+  values: [number, number][],
+  width: number,
+  height: number
+): Polygon {
+  values = values.sort(([a], [b]) => a - b)
+  const minX = Math.min(...values.map(([v]) => v))
+  const maxX = Math.max(...values.map(([v]) => v))
+  const maxY = Math.max(...values.map(([, v]) => v))
+  const complete = Array(maxX - minX)
+    .fill(0)
+    .map((_, i) => (values.find(([v]) => v === minX + i) || [0, 0])[1] / maxY)
+  const boundX = (width / 5) * 3
+  const boundY = (height / 5) * 2
+  const vertices = [
+    ...complete.map((y, x) => [
+      (x / complete.length) * boundX + (width - boundX),
+      height - y * boundY,
+    ]),
+    [width, height],
+    [width - boundX, height],
+  ]
+  return new Polygon(vertices as [number, number][])
+}
+
 const renderSlide = (width: number, height: number) => <I extends number>(
   slide: typeof slides[I]
 ): Polygon => {
   if ('value' in slide) return renderSingle(slide.value, width, height)
-  else if ('values' in slide)
-    return renderRadar(Object.values(slide.values), width, height)
+  else if ('values' in slide) {
+    if (!Array.isArray(slide.values))
+      return renderRadar(Object.values(slide.values), width, height)
+    else return renderArea(slide.values as [number, number][], width, height)
+  }
   return new Polygon()
 }
 
