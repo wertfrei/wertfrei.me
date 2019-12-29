@@ -16,27 +16,15 @@ export default function Canvas({ slide }: Props) {
     render(width, height, slide)
   }, [slide, render, width, height])
 
-  return (
-    <S.Wrap>
-      <S.Canvas ref={ref} width={`${width}px`} height={`${height}px`} />
-    </S.Wrap>
-  )
+  return <S.Canvas ref={ref} width={`${width}px`} height={`${height}px`} />
 }
 
 const S = {
-  Wrap: styled.div`
-    position: absolute;
-    display: block;
-    top: 90vh;
-    z-index: -1;
-    width: 100vw;
-    height: 310vh;
-  `,
-
   Canvas: styled.canvas`
-    position: sticky;
+    position: absolute;
     top: 0;
-    width: 100vw;
-    height: 100vh;
+    left: 0;
+    width: 100%;
+    height: 100%;
   `,
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import throttle from 'lodash/throttle'
 import Intro from './Home/Intro'
 import Slide from './Home/Slide'
-import Canvas from './Home/Canvas'
+import DrawLayer from './Home/DrawLayer'
 import Menu from '../components/Menu'
 
 const slides = [
@@ -21,7 +21,7 @@ export default function Home() {
       {slides.map(title => (
         <Slide title={title} key={title} />
       ))}
-      <Canvas slide={slide} />
+      <DrawLayer slide={slide} />
     </>
   )
 }
@@ -45,5 +45,5 @@ function useActiveSlide() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return Math.max(active || 0, 0)
+  return active === null ? -1 : active
 }
