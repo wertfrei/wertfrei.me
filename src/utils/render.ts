@@ -65,8 +65,14 @@ function renderSingle(v: number, width: number, height: number): Polygon {
 }
 
 function renderRadar(values: number[], width: number, height: number): Polygon {
-  console.log(values)
-  return new Polygon()
+  const radius = (Math.min(width, height) * 0.9) / 2
+  const max = Math.max(...values)
+  const normalized = values.map(v => v / max)
+  const vertices = normalized.map((v, i) => [
+    Math.sin((i / normalized.length) * (2 * Math.PI)) * v * radius + width / 2,
+    Math.cos((i / normalized.length) * (2 * Math.PI)) * v * radius + height / 2,
+  ])
+  return new Polygon(vertices as [number, number][])
 }
 
 export let polygons = []
