@@ -6,7 +6,8 @@ interface Edge {
   p2: Vector
 }
 class Polygon {
-  vertices: Vector[] = []
+  constructor(public vertices: Vector[] = []) {}
+
   get edges(): Edge[] {
     const vertices = [...this.vertices, this.vertices[0]]
     return vertices
@@ -25,11 +26,23 @@ class Vector {
   constructor(public x = 0, public y = 0) {}
 
   static fromEdge({ p1, p2 }: Edge) {
-    return [new Vector(p1.x, p1.y), new Vector(p2.x - p1.x, p2.y - p1.y)]
+    return [new Vector(p1.x, p1.y), p2.minus(p1)]
   }
 
   get magnitude() {
     return Math.sqrt(this.x ** 2 + this.y ** 2)
+  }
+
+  add(vec: Vector) {
+    return new Vector(this.x + vec.x, this.y + vec.y)
+  }
+
+  minus(vec: Vector) {
+    return new Vector(this.x - vec.x, this.y - vec.y)
+  }
+
+  map(func: (v: number) => number) {
+    return new Vector(...[this.x, this.y].map(func))
   }
 }
 
@@ -80,16 +93,28 @@ function segmentPolygon(polygon: Polygon, vertices: number = 100): Polygon {
       v,
       ...new Array(edges[i].verts)
         .fill(0)
-        .map(
-          (_, iv, { length }) =>
-            new Vector(
-              edges[i].pos.x + (edges[i].dir.x * iv) / length,
-              edges[i].pos.y + (edges[i].dir.y * iv) / length
-            )
+        .map((_, iv, { length }) =>
+          edges[i].pos.add(edges[i].dir.map(v => (v * iv) / length))
         ),
     ]),
   ]
   return segmented
+}
+
+function matchSegments(p1: Polygon, p2: Polygon): number {
+  const nv = Math.min(p1.vertices.length, p2.vertices.length)
+  const avgDists = Array(nv)
+    .fill(Array(nv).fill(0))
+    .map(
+      (a, i0) =>
+        a
+          .map(
+            (_, i1) =>
+              p2.vertices[i1].minus(p1.vertices[(i1 + i0) % nv]).magnitude
+          )
+          .reduce((a, b) => a + b) / nv
+    )
+  return avgDists.findIndex(v => v === Math.min(...avgDists))
 }
 
 function renderSingle(v: number): Polygon {
@@ -122,6 +147,36 @@ function renderSingle(v: number): Polygon {
   return polygon
 }
 
+const polygons = [
+  renderSingle(slides[0].value),
+  renderSingle(slides[1].value),
+  new Polygon([
+    new Vector(0.2, 0.1),
+    new Vector(0.55, 0.5),
+    new Vector(0.7, 0.55),
+    new Vector(0.5, 0.9),
+    new Vector(0.4, 0.55),
+    new Vector(0.48, 0.5),
+  ]),
+]
+  .map(polygon => ({
+    polygon,
+    segmented: segmentPolygon(polygon),
+  }))
+  .map((p, i, polygons) => ({
+    ...p,
+    ...(i < polygons.length - 1 && {
+      match: matchSegments(polygons[i].segmented, polygons[i + 1].segmented),
+    }),
+  }))
+
+let lastSlide = 0
+const transition = {
+  start: null,
+  from: null,
+  to: null,
+  dur: 500,
+}
 export function useRender(ref: MutableRefObject<HTMLCanvasElement>) {
   const [ctx, setCtx] = useState<CanvasRenderingContext2D>()
 
@@ -130,21 +185,53 @@ export function useRender(ref: MutableRefObject<HTMLCanvasElement>) {
     ctx.clearRect(0, 0, width, height)
     ctx.fillStyle = '#ff0739'
 
-    let polygon: Polygon
-    if (slide < slides.length && 'value' in slides[slide])
-      polygon = renderSingle(slides[slide].value)
-    else {
-      polygon = new Polygon()
-      polygon.vertices.push(new Vector(0.2, 0.1))
-      polygon.vertices.push(new Vector(0.55, 0.5))
-      polygon.vertices.push(new Vector(0.7, 0.55))
-      polygon.vertices.push(new Vector(0.5, 0.9))
-      polygon.vertices.push(new Vector(0.4, 0.55))
-      polygon.vertices.push(new Vector(0.48, 0.5))
-    }
+    if (!transition.start) {
+      renderPolygon(ctx, width, height, polygons[slide].polygon)
+      // renderVertices(
+      //   ctx,
+      //   width,
+      //   height,
+      //   segmentPolygon(polygons[slide].segmented)
+      // )
+      if (slide !== lastSlide) {
+        transition.start = performance.now()
+        transition.from = lastSlide
+        transition.to = slide
+        lastSlide = slide
+        requestAnimationFrame(() => render(width, height, slide))
+      }
+    } else {
+      if (performance.now() - transition.start >= transition.dur) {
+        transition.start = null
+        return render(width, height, slide)
+      }
+      const dir = transition.to > transition.from
+      const matchIndex = i => {
+        let di =
+          i +
+          (dir
+            ? -polygons[transition.from].match
+            : polygons[transition.to].match)
+        if (di < 0)
+          di = polygons[transition.from].segmented.vertices.length - di
+        return di % polygons[transition.from].segmented.vertices.length
+      }
 
-    renderPolygon(ctx, width, height, polygon)
-    renderVertices(ctx, width, height, segmentPolygon(polygon))
+      const polygon = new Polygon(
+        polygons[transition.from].segmented.vertices.map((v, i) =>
+          v.add(
+            polygons[transition.to].segmented.vertices[matchIndex(i)]
+              .minus(v)
+              .map(
+                v =>
+                  v * ((performance.now() - transition.start) / transition.dur)
+              )
+          )
+        )
+      )
+      renderPolygon(ctx, width, height, polygon)
+      requestAnimationFrame(() => render(width, height, slide))
+    }
   }
 
   useEffect(() => {
