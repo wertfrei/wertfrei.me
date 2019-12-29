@@ -1,4 +1,5 @@
 import { useState, useEffect, MutableRefObject } from 'react'
+import { interpolate } from 'flubber'
 import slides from '../slides.json'
 
 interface Edge {
@@ -60,13 +61,6 @@ function renderPolygon(
   ctx.fill()
 }
 
-function renderVertices(ctx, width, height, polygon: Polygon) {
-  ctx.fillStyle = '#00f'
-  polygon.vertices.forEach(({ x, y }) =>
-    ctx.fillRect(x * width - 5, y * height - 5, 10, 10)
-  )
-}
-
 function segmentPolygon(polygon: Polygon, vertices: number = 100): Polygon {
   const segmented = new Polygon()
   let v = vertices
@@ -99,22 +93,6 @@ function segmentPolygon(polygon: Polygon, vertices: number = 100): Polygon {
     ]),
   ]
   return segmented
-}
-
-function matchSegments(p1: Polygon, p2: Polygon): number {
-  const nv = Math.min(p1.vertices.length, p2.vertices.length)
-  const avgDists = Array(nv)
-    .fill(Array(nv).fill(0))
-    .map(
-      (a, i0) =>
-        a
-          .map(
-            (_, i1) =>
-              p2.vertices[i1].minus(p1.vertices[(i1 + i0) % nv]).magnitude
-          )
-          .reduce((a, b) => a + b) / nv
-    )
-  return avgDists.findIndex(v => v === Math.min(...avgDists))
 }
 
 function renderSingle(v: number): Polygon {
@@ -166,7 +144,12 @@ const polygons = [
   .map((p, i, polygons) => ({
     ...p,
     ...(i < polygons.length - 1 && {
-      match: matchSegments(polygons[i].segmented, polygons[i + 1].segmented),
+      inter: interpolate(
+        ...[i, i + 1].map(i =>
+          polygons[i].segmented.vertices.map(({ x, y }) => [x, y])
+        ),
+        { string: false }
+      ),
     }),
   }))
 
@@ -187,12 +170,6 @@ export function useRender(ref: MutableRefObject<HTMLCanvasElement>) {
 
     if (!transition.start) {
       renderPolygon(ctx, width, height, polygons[slide].polygon)
-      // renderVertices(
-      //   ctx,
-      //   width,
-      //   height,
-      //   segmentPolygon(polygons[slide].segmented)
-      // )
       if (slide !== lastSlide) {
         transition.start = performance.now()
         transition.from = lastSlide
@@ -205,30 +182,14 @@ export function useRender(ref: MutableRefObject<HTMLCanvasElement>) {
         transition.start = null
         return render(width, height, slide)
       }
-      const dir = transition.to > transition.from
-      const matchIndex = i => {
-        let di =
-          i +
-          (dir
-            ? -polygons[transition.from].match
-            : polygons[transition.to].match)
-        if (di < 0)
-          di = polygons[transition.from].segmented.vertices.length - di
-        return di % polygons[transition.from].segmented.vertices.length
-      }
-
+      let dt = (performance.now() - transition.start) / transition.dur
+      if (transition.from > transition.to) dt = 1 - dt
       const polygon = new Polygon(
-        polygons[transition.from].segmented.vertices.map((v, i) =>
-          v.add(
-            polygons[transition.to].segmented.vertices[matchIndex(i)]
-              .minus(v)
-              .map(
-                v =>
-                  v * ((performance.now() - transition.start) / transition.dur)
-              )
-          )
-        )
+        polygons[Math.min(transition.from, transition.to)]
+          .inter(dt)
+          .map(([x, y]) => new Vector(x, y))
       )
+
       renderPolygon(ctx, width, height, polygon)
       requestAnimationFrame(() => render(width, height, slide))
     }
