@@ -7,7 +7,7 @@ export default function YesNo({ slide = 0 }) {
   return (
     <>
       {Object.entries(slides[slide].values).map(([k, v], i) => (
-        <S.Label key={k} num={i / 2 / slides.length}>
+        <S.Label key={k} num={i / Object.keys(slides[slide].values).length}>
           {k}
           <span>{Math.round(v * 100)}%</span>
         </S.Label>
@@ -28,7 +28,7 @@ const S = {
         )
       )
       translateY(
-        ${({ num }) => Math.round(Math.cos(num * (2 * Math.PI)) * 80) / 2}vmin
+        ${({ num }) => Math.round(Math.cos(num * (2 * Math.PI)) * 85) / 2}vmin
       );
     text-transform: uppercase;
     font-size: 1.1rem;
