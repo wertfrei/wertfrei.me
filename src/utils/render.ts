@@ -3,12 +3,7 @@ import { Vector, Polygon } from './math'
 import { interpolate } from 'flubber'
 import slides from '../slides.json'
 
-function renderPolygon(
-  ctx: CanvasRenderingContext2D,
-  width: number,
-  height: number,
-  polygon: Polygon
-) {
+function renderPolygon(ctx: CanvasRenderingContext2D, polygon: Polygon) {
   if (polygon.vertices.length === 0) return
   ctx.beginPath()
   polygon.vertices.forEach(({ x, y }, i) =>
@@ -17,41 +12,7 @@ function renderPolygon(
   ctx.fill()
 }
 
-function segmentPolygon(polygon: Polygon, vertices: number = 100): Polygon {
-  const segmented = new Polygon()
-  let v = vertices
-  for (let i = 0; i < polygon.vertices.length && v > 0; i++) {
-    segmented.vertices.push(polygon.vertices[i])
-    v--
-  }
-  const perimeter = polygon.perimeter
-  const numEdgeVerts = v
-  const edges = polygon.edges.map(Vector.fromEdge).map(([pos, dir]) => {
-    const verts = Math.min(
-      Math.ceil((dir.magnitude / perimeter) * numEdgeVerts),
-      v
-    )
-    v -= verts
-    return {
-      pos,
-      dir,
-      verts,
-    }
-  })
-  segmented.vertices = [
-    ...segmented.vertices.flatMap((v, i) => [
-      v,
-      ...new Array(edges[i].verts)
-        .fill(0)
-        .map((_, iv, { length }) =>
-          edges[i].pos.add(edges[i].dir.map(v => (v * iv) / length))
-        ),
-    ]),
-  ]
-  return segmented
-}
-
-function renderSingle(v: number, width, height): Polygon {
+function renderSingle(v: number, width: number, height: number): Polygon {
   let polygon: Polygon
   const A = 29.3 * (Math.PI / 180)
   const h1 = height * v - (1 / 2) * width * Math.tan(A)
@@ -112,7 +73,7 @@ export function useRender(
     ctx.fillStyle = '#ff0739'
 
     if (!transition.start) {
-      renderPolygon(ctx, width, height, polygons[slide].polygon)
+      renderPolygon(ctx, polygons[slide].polygon)
       if (slide !== lastSlide) {
         transition.start = performance.now()
         transition.from = lastSlide
@@ -134,7 +95,7 @@ export function useRender(
           .map(([x, y]) => new Vector(x, y))
       )
 
-      renderPolygon(ctx, width, height, polygon)
+      renderPolygon(ctx, polygon)
       requestAnimationFrame(() => render(width, height, slide))
     }
   }
@@ -155,14 +116,13 @@ export function useRender(
     ]
       .map(polygon => ({
         polygon,
-        segmented: segmentPolygon(polygon),
       }))
       .map((p, i, polygons) => ({
         ...p,
         ...(i < polygons.length - 1 && {
           inter: interpolate(
             ...[i, i + 1].map(i =>
-              polygons[i].segmented.vertices.map(({ x, y }) => [x, y])
+              polygons[i].polygon.vertices.map(({ x, y }) => [x, y])
             ),
             { string: false }
           ),
