@@ -18,40 +18,52 @@ function renderSingle(v: number, width: number, height: number): Polygon {
   const h1 = height * v - (1 / 2) * width * Math.tan(A)
   const h2 = (width * Math.sin(A)) / Math.sin(90 * (Math.PI / 180) - A)
   if (h1 > 0 && h1 + h2 <= height) {
+    const diagonal = {
+      p1: new Vector(0, height - h1),
+      p2: new Vector(width, height - (h1 + h2)),
+    }
     polygon = new Polygon([
-      [0, height - h1],
-      [width, height - (h1 + h2)],
+      diagonal.p1.values,
+      diagonal.p2.values,
       [width, (1 - slides[0].value) * height],
       [width, height],
       [0, height],
     ])
+    polygon.diagonal = diagonal
   } else if (h1 <= 0) {
     const w =
       (Math.sqrt(2) * Math.sqrt(height) * Math.sqrt(width) * Math.sqrt(v)) /
       Math.sqrt(Math.tan(A))
     const h = (w * Math.sin(A)) / Math.sin(90 * (Math.PI / 180) - A)
+    const diagonal = {
+      p1: new Vector(width - w, height),
+      p2: new Vector(width, height - h),
+    }
     polygon = new Polygon([
-      [width - w, height],
-      [width, height - h],
+      diagonal.p1.values,
+      diagonal.p2.values,
       [width, height],
     ])
+    polygon.diagonal = diagonal
   } else {
     const ai = 90 * (Math.PI / 180) - A
     let h =
       (Math.sqrt(2) * Math.sqrt(height) * Math.sqrt(width) * Math.sqrt(1 - v)) /
       Math.sqrt(Math.tan(ai))
     let w = (h * Math.sin(ai)) / Math.sin(90 * (Math.PI / 180) - ai)
+    const diagonal = { p1: new Vector(0, h), p2: new Vector(w, 0) }
     polygon = new Polygon([
-      [0, h],
-      [w, 0],
+      diagonal.p1.values,
+      diagonal.p2.values,
       [width, 0],
       [width, height],
       [0, height],
     ])
+    polygon.diagonal = diagonal
   }
   return polygon
 }
-let polygons = []
+export let polygons = []
 
 let lastSlide = 0
 const transition = {

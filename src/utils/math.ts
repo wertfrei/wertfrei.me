@@ -20,6 +20,15 @@ export class Vector {
   map(func: (v: number) => number) {
     return new Vector(...[this.x, this.y].map(func))
   }
+
+  set(x = this.x, y = this.y) {
+    this.x = x
+    this.y = y
+  }
+
+  get values(): [number, number] {
+    return [this.x, this.y]
+  }
 }
 
 export interface Edge {
@@ -29,6 +38,7 @@ export interface Edge {
 
 export class Polygon {
   vertices: Vector[]
+  diagonal?: Edge
 
   constructor(vertices: (Vector | [number, number])[] = []) {
     this.vertices = vertices.map(v =>

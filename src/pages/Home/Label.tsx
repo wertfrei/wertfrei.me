@@ -1,14 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
+import YesNo from './Label/YesNo'
+import { useWindowSize } from '../../utils/hooks'
+import slides from '../../slides.json'
 
 interface Props {
   slide: number
 }
 
 export default function Label({ slide }: Props) {
+  useWindowSize()
+
+  if (slide < 0 || slide >= slides.length) return null
   return (
     <S.Label>
-      <h1>{slide}</h1>
+      {slide < slides.length && 'value' in slides[slide] && (
+        <YesNo slide={slide} />
+      )}
     </S.Label>
   )
 }
