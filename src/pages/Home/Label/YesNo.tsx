@@ -21,13 +21,21 @@ const S = {
       (p1.x + (p2.x - p1.x) / 2) / devicePixelRatio}px;
     top: ${({ diagonal: { p1, p2 } }) =>
       (p1.y + (p2.y - p1.y) / 2) / devicePixelRatio}px;
-    transform: translateX(-50%) translateY(calc(-50% + 0.3rem))
-      rotateZ(-29.3deg);
+
+    transform-origin: center;
+    transform: translateX(-50%) translateY(calc(-50% + 0.6vw)) rotateZ(-29.3deg);
+
+    @media (min-width: 560px) {
+      transform: translateX(-50%) translateY(calc(-50% + 0.35rem))
+        rotateZ(-29.3deg);
+    }
 
     p {
       font-size: 4rem;
+      font-size: min(4rem, 10vw);
       line-height: 3.5rem;
-      font-weight: 600;
+      line-height: 87.5%
+      font-weight: bold;
       text-transform: uppercase;
       vertical-align: baseline;
       white-space: nowrap;
