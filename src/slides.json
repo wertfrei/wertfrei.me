@@ -1,11 +1,14 @@
 [
   {
+    "question": "Bist du glücklich?",
     "value": 0.76
   },
   {
+    "question": "Trägst du Tattoos?",
     "value": 0.11
   },
   {
+    "question": "Welche Sprachen sprichst du?",
     "values": {
       "german": 1,
       "russian": 0.08,
@@ -15,6 +18,19 @@
       "english": 0.91,
       "french": 0.22,
       "turkish": 0.13
+    }
+  },
+  {
+    "question": "Welche Drogen konsumierst du?",
+    "values": {
+      "alkohol": 0.94,
+      "amphetamine": 0.08,
+      "nikotin": 0.66,
+      "halluzinogene": 0.29,
+      "mdma": 0.36,
+      "heroin": 0.01,
+      "kokain": 0.14,
+      "marihuana": 0.63
     }
   }
 ]

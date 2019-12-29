@@ -4,12 +4,7 @@ import Intro from './Home/Intro'
 import Slide from './Home/Slide'
 import DrawLayer from './Home/DrawLayer'
 import Menu from '../components/Menu'
-
-const slides = [
-  'Bist du glücklich?',
-  'Trägst du Tattoos?',
-  'Welche Sprachen sprichst du?',
-]
+import slides from '../slides.json'
 
 export default function Home() {
   const slide = useActiveSlide()
@@ -18,8 +13,8 @@ export default function Home() {
     <>
       <Menu />
       <Intro />
-      {slides.map(title => (
-        <Slide title={title} key={title} />
+      {slides.map(({ question }) => (
+        <Slide title={question} key={question} />
       ))}
       <DrawLayer slide={slide} />
     </>

@@ -66,13 +66,21 @@ function renderSingle(v: number, width: number, height: number): Polygon {
 
 function renderRadar(values: number[], width: number, height: number): Polygon {
   const radius = (Math.min(width, height) * 0.9) / 2
-  const max = Math.max(...values)
-  const normalized = values.map(v => v / max)
+  const normalized = values.map(v => v / Math.max(...values))
   const vertices = normalized.map((v, i) => [
     Math.sin((i / normalized.length) * (2 * Math.PI)) * v * radius + width / 2,
     Math.cos((i / normalized.length) * (2 * Math.PI)) * v * radius + height / 2,
   ])
   return new Polygon(vertices as [number, number][])
+}
+
+const renderSlide = (width: number, height: number) => <I extends number>(
+  slide: typeof slides[I]
+): Polygon => {
+  if ('value' in slide) return renderSingle(slide.value, width, height)
+  else if ('values' in slide)
+    return renderRadar(Object.values(slide.values), width, height)
+  return new Polygon()
 }
 
 export let polygons = []
@@ -128,11 +136,8 @@ export function useRender(
 
   useEffect(() => {
     if (!width || !height) return
-    polygons = [
-      renderSingle(slides[0].value, width, height),
-      renderSingle(slides[1].value, width, height),
-      renderRadar(Object.values(slides[2].values), width, height),
-    ]
+    polygons = slides
+      .map(renderSlide(width, height))
       .map(polygon => ({
         polygon,
       }))

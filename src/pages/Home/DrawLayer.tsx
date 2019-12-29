@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Canvas from './Canvas'
 import Label from './Label'
 import styled from 'styled-components'
+import slides from '../../slides.json'
 
 interface Props {
   slide: number
@@ -40,7 +41,7 @@ const S = {
     top: 90vh;
     z-index: -1;
     width: 100vw;
-    height: 310vh;
+    height: ${slides.length * 100 + 10}vh;
   `,
 
   Layer: styled.div`
