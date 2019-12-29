@@ -34,7 +34,7 @@ const S = {
       font-size: 4rem;
       font-size: min(4rem, 10vw);
       line-height: 3.5rem;
-      line-height: 87.5%
+      line-height: 87.5%;
       font-weight: bold;
       text-transform: uppercase;
       vertical-align: baseline;

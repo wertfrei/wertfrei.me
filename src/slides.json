@@ -10,14 +10,14 @@
   {
     "question": "Welche Sprachen sprichst du?",
     "values": {
-      "german": 1,
-      "russian": 0.08,
-      "arabic": 0.06,
-      "dutch": 0.29,
-      "spanish": 0.18,
-      "english": 0.91,
-      "french": 0.22,
-      "turkish": 0.13
+      "deutsch": 1,
+      "russisch": 0.08,
+      "arabisch": 0.06,
+      "niederländisch": 0.29,
+      "spanisch": 0.18,
+      "englisch": 0.91,
+      "frenzösisch": 0.22,
+      "türkisch": 0.13
     }
   },
   {
