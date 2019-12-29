@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import YesNo from './Label/YesNo'
 import Radar from './Label/Radar'
+import Area from './Label/Area'
 import { useWindowSize } from '../../utils/hooks'
 import slides from '../../slides.json'
 
@@ -18,6 +19,8 @@ export default function Label({ slide }: Props) {
       {slide < slides.length &&
         ('value' in slides[slide] ? (
           <YesNo slide={slide} />
+        ) : Array.isArray(slides[slide].values) ? (
+          <Area slide={slide} />
         ) : (
           <Radar slide={slide} />
         ))}

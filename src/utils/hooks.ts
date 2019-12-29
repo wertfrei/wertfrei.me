@@ -1,5 +1,6 @@
 import { useState, useEffect, MutableRefObject } from 'react'
 import debounce from 'lodash/debounce'
+import throttle from 'lodash/throttle'
 import ResObs from 'resize-observer-polyfill'
 
 export function useCanvasSize(
@@ -38,19 +39,29 @@ export function useWindowSize() {
   const [height, setHeight] = useState(0)
 
   useEffect(() => {
-    const handleChange = debounce(
-      () => {
-        setTimeout(() => {
-          setWidth(window.innerWidth)
-          setHeight(window.innerHeight)
-        }, 50)
-      },
-      200,
-      { leading: false, trailing: true }
-    )
+    const handleChange = debounce(() => {
+      setTimeout(() => {
+        setWidth(window.innerWidth)
+        setHeight(window.innerHeight)
+      }, 50)
+    }, 200)
     window.addEventListener('resize', handleChange, { passive: true })
     return () => window.removeEventListener('resize', handleChange)
   }, [])
 
   return [width, height]
+}
+
+export function useMouseX() {
+  const [x, setX] = useState(0)
+
+  useEffect(() => {
+    const handleMove = throttle(({ screenX }) => {
+      if (x !== screenX) setX(screenX)
+    }, 1000 / 30)
+    window.addEventListener('mousemove', handleMove)
+    return () => window.removeEventListener('mousemove', handleMove)
+  }, [x])
+
+  return x
 }
