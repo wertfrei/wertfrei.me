@@ -183,6 +183,7 @@ export function useRender(ref: MutableRefObject<HTMLCanvasElement>) {
         return render(width, height, slide)
       }
       let dt = (performance.now() - transition.start) / transition.dur
+      dt = dt ** 2 * (3 - 2 * dt)
       if (transition.from > transition.to) dt = 1 - dt
       const polygon = new Polygon(
         polygons[Math.min(transition.from, transition.to)]
