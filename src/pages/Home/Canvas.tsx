@@ -9,8 +9,8 @@ interface Props {
 
 export default function Canvas({ slide }: Props) {
   const ref = useRef<HTMLCanvasElement>()
-  const render = useRender(ref)
   const [width, height] = useCanvasSize(ref)
+  const render = useRender(ref, width, height)
 
   useEffect(() => {
     render(width, height, slide)
