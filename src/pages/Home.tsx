@@ -15,8 +15,8 @@ export default function Home() {
     <>
       <Menu />
       <Intro />
-      {slides.map(({ question }) => (
-        <Slide title={question} key={question} labelVisible={label} />
+      {slides.map(({ question }, i) => (
+        <Slide slide={i} key={question} labelVisible={label} />
       ))}
       <DrawLayer
         slide={slide}
