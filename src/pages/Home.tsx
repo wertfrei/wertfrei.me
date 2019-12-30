@@ -7,6 +7,7 @@ import Menu from '../components/Menu'
 import slides from '../slides.json'
 
 export default function Home() {
+  const [label, showLabel] = useState(false)
   const slide = useActiveSlide()
 
   return (
@@ -14,9 +15,13 @@ export default function Home() {
       <Menu />
       <Intro />
       {slides.map(({ question }) => (
-        <Slide title={question} key={question} />
+        <Slide title={question} key={question} labelVisible={label} />
       ))}
-      <DrawLayer slide={slide} />
+      <DrawLayer
+        slide={slide}
+        label={label}
+        onToggleLabel={(v = !label) => showLabel(v)}
+      />
     </>
   )
 }

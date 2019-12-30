@@ -4,7 +4,9 @@
   font-family: 'Futura', sans-serif;
   font-size: 14px;
   overflow-x: hidden;
+  --cl-black: #0a0a0a;
   --cl-red: #ff0739;
+  --trans-time: 0.2s;
 }
 
 body {
@@ -18,4 +20,5 @@ body {
   height: 100vh;
   scroll-snap-type: y mandatory;
   position: relative;
+  color: var(--cl-black);
 }

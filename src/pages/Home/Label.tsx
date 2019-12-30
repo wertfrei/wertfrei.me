@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import YesNo from './Label/YesNo'
 import Radar from './Label/Radar'
@@ -11,11 +11,16 @@ interface Props {
 }
 
 export default function Label({ slide }: Props) {
+  const [fade, setFade] = useState(true)
   useWindowSize()
+
+  useEffect(() => {
+    setFade(false)
+  }, [])
 
   if (slide < 0 || slide >= slides.length) return null
   return (
-    <S.Label>
+    <S.Label fade={fade}>
       {slide < slides.length &&
         ('value' in slides[slide] ? (
           <YesNo slide={slide} />
@@ -35,5 +40,7 @@ const S = {
     top: 0;
     width: 100%;
     height: 100%;
+    opacity: ${({ fade }) => (fade ? 0 : 1)};
+    transition: opacity var(--trans-time) ease;
   `,
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Canvas from './Canvas'
 import Label from './Label'
 import styled from 'styled-components'
@@ -6,28 +6,33 @@ import slides from '../../slides.json'
 
 interface Props {
   slide: number
+  label: boolean
+  onToggleLabel(v?: boolean): void
 }
 
-export default function DrawLayer({ slide }: Props) {
-  const [label, showLabel] = useState(false)
-
+export default function DrawLayer({ slide, label, onToggleLabel }: Props) {
   useEffect(() => {
-    showLabel(false)
+    onToggleLabel(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slide])
 
   useEffect(() => {
     const onClick = () => {
-      if (slide >= 0) showLabel(!label)
+      if (slide >= 0) onToggleLabel(!label)
     }
     document.getElementById('root').addEventListener('click', onClick)
     return () =>
       document.getElementById('root').removeEventListener('click', onClick)
-  }, [label, slide])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slide, label])
 
   return (
     <S.Wrap>
       <S.Layer>
-        <Canvas slide={Math.max(slide, 0)} />
+        <Canvas
+          slide={Math.max(slide, 0)}
+          labelVisible={label && !('value' in slides[slide])}
+        />
         {label && <Label slide={slide} />}
       </S.Layer>
     </S.Wrap>
