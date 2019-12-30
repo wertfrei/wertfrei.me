@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import throttle from 'lodash/throttle'
+import { useWindowSize } from '../utils/hooks'
 import Intro from './Home/Intro'
 import Slide from './Home/Slide'
 import DrawLayer from './Home/DrawLayer'
@@ -28,13 +29,16 @@ export default function Home() {
 
 function useActiveSlide() {
   const [active, setActive] = useState(null)
+  const [width] = useWindowSize()
 
   useEffect(() => {
     const root = document.getElementById('root')
 
     const handleScroll = throttle(() => {
       const slide =
-        ((root.scrollTop + window.innerHeight / 3) / window.innerHeight) | 0
+        width > 768
+          ? ((root.scrollTop + window.innerHeight / 3) / window.innerHeight) | 0
+          : ((root.scrollLeft + window.innerWidth / 2) / window.innerWidth) | 0
       if (active !== slide) setActive(slide - 1)
     }, 1000 / 30)
 

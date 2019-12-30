@@ -31,7 +31,7 @@ export default function DrawLayer({ slide, label, onToggleLabel }: Props) {
       <S.Layer>
         <Canvas
           slide={Math.max(slide, 0)}
-          labelVisible={label && !('value' in slides[slide])}
+          labelVisible={label && !('value' in slides[Math.max(slide, 0)])}
         />
         {label && <Label slide={slide} />}
       </S.Layer>
@@ -47,6 +47,13 @@ const S = {
     z-index: -1;
     width: 100vw;
     height: ${slides.length * 100 + 10}vh;
+
+    @media (max-width: 768px) {
+      height: 100vh;
+      width: ${slides.length * 100}vw;
+      top: 0;
+      left: 100vw;
+    }
   `,
 
   Layer: styled.div`
@@ -54,5 +61,9 @@ const S = {
     top: 0;
     width: 100vw;
     height: 100vh;
+
+    @media (max-width: 768px) {
+      left: 0;
+    }
   `,
 }

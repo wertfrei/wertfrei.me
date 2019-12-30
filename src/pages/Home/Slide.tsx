@@ -29,5 +29,9 @@ const S = {
       font-size: 2.5rem;
       text-transform: uppercase;
     }
+
+    @media (max-width: 768px) {
+      width: 100vw;
+    }
   `,
 }

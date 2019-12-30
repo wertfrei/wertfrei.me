@@ -21,4 +21,16 @@ body {
   scroll-snap-type: y mandatory;
   position: relative;
   color: var(--cl-black);
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+
+    & > * {
+      flex-shrink: 0;
+    }
+  }
 }
