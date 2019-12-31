@@ -38,13 +38,13 @@ const S = {
 
       p {
         display: block;
-        font-size: 2.2rem;
+        font-size: 2rem;
         text-align: center;
         width: 100%;
         left: 0;
 
         ${({ bottom }) =>
-          bottom ? 'top: initial; bottom: 5%; color: white;' : 'top: 15%;'}
+          bottom ? 'top: initial; bottom: 2rem; color: white;' : 'top: 6rem;'}
         bottom: 100px;
       }
     }

@@ -5,7 +5,7 @@ export default function Intro() {
   return (
     <S.Intro>
       <p>Studierende in Deutschland.</p>
-      <p>Scroll durch und mach mit!</p>
+      <p>{window.innerWidth > 768 ? 'Scroll' : 'Swipe'} durch und mach mit!</p>
     </S.Intro>
   )
 }
@@ -26,6 +26,18 @@ const S = {
 
       &:last-child {
         color: var(--cl-red);
+      }
+    }
+
+    @media (max-width: 768px) {
+      padding: 0;
+
+      p {
+        font-size: 1.5rem;
+        transform: translateY(30vh);
+        width: 100%;
+        text-align: center;
+        font-stretch: condensed;
       }
     }
   `,
