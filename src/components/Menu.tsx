@@ -1,26 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import context from '~/src/context'
 import styled from 'styled-components'
 
 export default function Menu() {
   const [open, setOpen] = useState(false)
+  const { strings } = useContext(context)
 
   return (
     <>
       <S.Menu data-state={open ? 'open' : 'closed'}>
         <ul>
           <li>
-            <a>mach mit!</a>
+            <a>{strings.menu_participate}</a>
           </li>
           <br />
           <li>
-            <a>filteroptionen</a>
+            <a>{strings.menu_filter}</a>
           </li>
           <br />
           <li>
-            <a>datenschutz</a>
+            <a>{strings.menu_privacy}</a>
           </li>
           <li>
-            <a>impressum</a>
+            <a>{strings.menu_impressum}</a>
           </li>
         </ul>
       </S.Menu>

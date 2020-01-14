@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import context from '~/src/context'
 import styled from 'styled-components'
 
 export default function Intro() {
+  const { strings } = useContext(context)
+
   return (
     <S.Intro>
-      <p>Studierende in Deutschland.</p>
-      <p>{window.innerWidth > 768 ? 'Scroll' : 'Swipe'} durch und mach mit!</p>
+      <p>{strings.intro_student}</p>
+      <p>
+        {window.innerWidth > 768 ? strings.intro_scroll : strings.intro_swipe}
+      </p>
     </S.Intro>
   )
 }
