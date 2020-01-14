@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react'
+import Language from './Language'
 import context from '~/src/context'
 import styled from 'styled-components'
 
@@ -9,7 +10,7 @@ export default function Menu() {
   return (
     <>
       <S.Menu data-state={open ? 'open' : 'closed'}>
-        <ul>
+        <S.List>
           <li>
             <a>{strings.menu_participate}</a>
           </li>
@@ -24,7 +25,8 @@ export default function Menu() {
           <li>
             <a>{strings.menu_impressum}</a>
           </li>
-        </ul>
+        </S.List>
+        <Language />
       </S.Menu>
       <S.Hamburger onClick={() => setOpen(!open)}>
         <S.HamburgerBox>
@@ -58,14 +60,14 @@ const S = {
       transition: clip-path var(--trans-time) ease;
       opacity: 1;
     }
+  `,
 
-    ul {
-      font-size: 2rem;
-      text-transform: uppercase;
-      justify-content: space-between;
+  List: styled.ul`
+    font-size: 2rem;
+    text-transform: uppercase;
+    justify-content: space-between;
 
-      line-height: 3rem;
-    }
+    line-height: 3rem;
   `,
 
   Hamburger: styled.button`
