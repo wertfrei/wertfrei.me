@@ -8,10 +8,15 @@ export default function YesNo({ slide = 0 }) {
 
   if (slide >= polygons.length || !polygons[slide].polygon.diagonal) return null
   let diagonal = polygons[slide].polygon.diagonal
+  const [yes, no] = slides[slide].answers || ['yes', 'no']
   return (
     <S.Label diagonal={diagonal}>
-      <p>{Math.round((1 - slides[slide].value) * 100)}% nein</p>
-      <p>{Math.round(slides[slide].value * 100)}% Ja</p>
+      <p>
+        {Math.round((1 - slides[slide].value) * 100)}% {no}
+      </p>
+      <p>
+        {Math.round(slides[slide].value * 100)}% {yes}
+      </p>
     </S.Label>
   )
 }

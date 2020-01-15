@@ -10,8 +10,8 @@ import languages from './languages.json'
 import './styles/master.scss'
 
 const query = gql`
-  {
-    questions(language: EN) {
+  query fetchData($language: Language) {
+    questions(language: $language) {
       question
       type
       answers
@@ -45,14 +45,16 @@ function App() {
       return Object.fromEntries(valid)
     }
 
-    api.query({ query }).then(({ data }) => {
-      const slides = data.questions.map(({ question, type, ...v }) =>
-        type === 'BINARY'
-          ? { question, value: v.data.value }
-          : { question, values: prepRadarData(v.data) }
-      )
-      setCtx({ ...ctx, slides })
-    })
+    api
+      .query({ query, variables: { language: ctx.language.toUpperCase() } })
+      .then(({ data }) => {
+        const slides = data.questions.map(({ question, answers, type, ...v }) =>
+          type === 'BINARY'
+            ? { question, answers, value: v.data.value }
+            : { question, values: prepRadarData(v.data) }
+        )
+        setCtx({ ...ctx, slides })
+      })
   }, [ctx.language])
 
   return (

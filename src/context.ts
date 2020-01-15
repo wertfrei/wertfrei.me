@@ -7,6 +7,7 @@ export type Language = 'en' | 'de'
 interface Slide {
   question: string
   value?: number
+  answers?: [string, string]
   values?: { [key: string]: number } | [number, number][]
 }
 
