@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html --out-dir public",
+    "build": "npx graphql-codegen && parcel build index.html --out-dir public",
     "lint": "eslint . --cache --ext .js,.jsx,.ts,.tsx && prettier --check \"./*.{js,jsx,ts,tsx,html}\" \"./**/*.{js,jsx,ts,tsx,html}\"",
     "format": "eslint . --cache --ext .js,.jsx,.ts,.tsx --fix && prettier --write \"./*.{js,jsx,ts,tsx,html}\" \"./**/*.{js,jsx,ts,tsx,html}\""
   },
@@ -21,7 +21,16 @@
   },
   "homepage": "https://github.com/MathisBullinger/census#readme",
   "dependencies": {
+    "@apollo/react-hooks": "^3.1.3",
+    "apollo-boost": "^0.4.7",
+    "apollo-cache-inmemory": "^1.6.5",
+    "apollo-client": "^2.6.8",
+    "apollo-link": "^1.2.13",
+    "apollo-link-error": "^1.1.12",
+    "apollo-link-http": "^1.5.16",
     "flubber": "^0.4.2",
+    "graphql": "^14.5.8",
+    "graphql-tag": "^2.10.1",
     "lodash": "^4.17.15",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
@@ -30,6 +39,8 @@
     "styled-components": "^4.4.1"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.11.2",
+    "@graphql-codegen/fragment-matcher": "^1.11.2",
     "@types/react": "^16.9.17",
     "@typescript-eslint/eslint-plugin": "^2.12.0",
     "@typescript-eslint/parser": "^2.12.0",
@@ -41,6 +52,7 @@
     "eslint-plugin-react-hooks": "^2.3.0",
     "parcel-bundler": "^1.12.4",
     "prettier": "^1.19.1",
+    "sass": "^1.24.4",
     "typescript": "^3.7.4"
   }
 }
