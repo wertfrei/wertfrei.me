@@ -1,7 +1,7 @@
-import { useState, useEffect, MutableRefObject } from 'react'
+import { useState, useEffect, MutableRefObject, useContext } from 'react'
 import { Vector, Polygon } from './math'
 import { interpolate } from 'flubber'
-import slides from '../slides.json'
+import context from '~/src/context'
 
 function renderPolygon(ctx: CanvasRenderingContext2D, polygon: Polygon) {
   if (polygon.vertices.length === 0) return
@@ -12,7 +12,12 @@ function renderPolygon(ctx: CanvasRenderingContext2D, polygon: Polygon) {
   ctx.fill()
 }
 
-function renderSingle(v: number, width: number, height: number): Polygon {
+function renderSingle(
+  v: number,
+  width: number,
+  height: number,
+  slides: any[]
+): Polygon {
   let polygon: Polygon
   const A = 29.3 * (Math.PI / 180)
   const h1 = height * v - (1 / 2) * width * Math.tan(A)
@@ -99,10 +104,12 @@ function renderArea(
   return new Polygon(vertices as [number, number][])
 }
 
-const renderSlide = (width: number, height: number) => <I extends number>(
+const renderSlide = (slides: any[], width: number, height: number) => <
+  I extends number
+>(
   slide: typeof slides[I]
 ): Polygon => {
-  if ('value' in slide) return renderSingle(slide.value, width, height)
+  if ('value' in slide) return renderSingle(slide.value, width, height, slides)
   else if ('values' in slide) {
     if (!Array.isArray(slide.values))
       return renderRadar(Object.values(slide.values), width, height)
@@ -125,6 +132,7 @@ export function useRender(
   height: number
 ) {
   const [ctx, setCtx] = useState<CanvasRenderingContext2D>()
+  const { slides } = useContext(context)
 
   function render(width: number, height: number, slide = 0) {
     if (!ctx || polygons.length === 0) return
@@ -165,7 +173,7 @@ export function useRender(
   useEffect(() => {
     if (!width || !height) return
     polygons = slides
-      .map(renderSlide(width, height))
+      .map(renderSlide(slides, width, height))
       .map(polygon => ({
         polygon,
       }))

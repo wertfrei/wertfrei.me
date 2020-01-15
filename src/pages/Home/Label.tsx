@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import YesNo from './Label/YesNo'
 import Radar from './Label/Radar'
 import Area from './Label/Area'
 import { useWindowSize } from '../../utils/hooks'
-import slides from '../../slides.json'
+import context from '~/src/context'
 
 interface Props {
   slide: number
 }
 
 export default function Label({ slide }: Props) {
+  const { slides } = useContext(context)
   const [fade, setFade] = useState(true)
   useWindowSize()
 

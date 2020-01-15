@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
-import slides from '../../slides.json'
+import context from '~/src/context'
 
 interface Props {
   slide: number
@@ -8,6 +8,8 @@ interface Props {
 }
 
 export default function Slide({ slide, labelVisible }: Props) {
+  const { slides } = useContext(context)
+
   return (
     <S.Slide fade={labelVisible} bottom={slides[slide].value > 0.5}>
       <p>{slides[slide].question}</p>

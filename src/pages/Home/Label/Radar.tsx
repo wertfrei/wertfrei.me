@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
-import slides from '../../../slides.json'
+import context from '~/src/context'
 
 export default function YesNo({ slide = 0 }) {
+  const { slides } = useContext(context)
   if (slide >= slides.length || !slides[slide].values) return null
   return (
     <>

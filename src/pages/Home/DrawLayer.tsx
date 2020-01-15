@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import Canvas from './Canvas'
 import Label from './Label'
 import styled from 'styled-components'
-import slides from '../../slides.json'
+import context from '~/src/context'
 
 interface Props {
   slide: number
@@ -11,6 +11,8 @@ interface Props {
 }
 
 export default function DrawLayer({ slide, label, onToggleLabel }: Props) {
+  const { slides } = useContext(context)
+
   useEffect(() => {
     onToggleLabel(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -27,7 +29,7 @@ export default function DrawLayer({ slide, label, onToggleLabel }: Props) {
   }, [slide, label])
 
   return (
-    <S.Wrap>
+    <S.Wrap slides={slides}>
       <S.Layer>
         <Canvas
           slide={Math.max(slide, 0)}
@@ -46,11 +48,11 @@ const S = {
     top: 90vh;
     z-index: -1;
     width: 100vw;
-    height: ${slides.length * 100 + 10}vh;
+    height: ${({ slides }) => slides.length * 100 + 10}vh;
 
     @media (max-width: 768px) {
       height: 100vh;
-      width: ${slides.length * 100}vw;
+      width: ${({ slides }) => slides.length * 100}vw;
       top: 0;
       left: 100vw;
     }

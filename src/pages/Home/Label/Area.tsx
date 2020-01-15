@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useMouseX } from '../../../utils/hooks'
 import styled from 'styled-components'
-import slides from '../../../slides.json'
+import context from '~/src/context'
 
 const { format } = new Intl.NumberFormat('de-DE', { style: 'decimal' })
 
 export default function Area({ slide }) {
+  const { slides } = useContext(context)
   const [maxY, setMaxY] = useState(0)
   const x = useMouseX()
   const values = slides[slide].values as [number, number][]

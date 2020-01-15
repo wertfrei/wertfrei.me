@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { polygons } from '../../../utils/render'
-import slides from '../../../slides.json'
+import context from '~/src/context'
 
 export default function YesNo({ slide = 0 }) {
+  const { slides } = useContext(context)
+
   if (slide >= polygons.length || !polygons[slide].polygon.diagonal) return null
   let diagonal = polygons[slide].polygon.diagonal
   return (

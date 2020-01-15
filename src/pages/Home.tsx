@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import throttle from 'lodash/throttle'
 import { useWindowSize } from '../utils/hooks'
 import Intro from './Home/Intro'
 import Slide from './Home/Slide'
 import DrawLayer from './Home/DrawLayer'
 import Menu from '../components/Menu'
-import slides from '../slides.json'
+import context from '~/src/context'
 
 export default function Home() {
   const [label, showLabel] = useState(false)
   const slide = useActiveSlide()
+  const { slides } = useContext(context)
 
   return (
     <>
