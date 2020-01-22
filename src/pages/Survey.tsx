@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import gql from 'graphql-tag'
 import api from '~/src/api'
 import context from '~/src/context'
+import Screen from './Survey/Screen'
 
 const query = gql`
   query fetchSurvey($language: Language) {
@@ -33,7 +34,7 @@ export default function Survey() {
   return (
     <div>
       {questions.map(({ key, question }) => (
-        <p key={key}>{question}</p>
+        <Screen key={key} question={question} />
       ))}
     </div>
   )
