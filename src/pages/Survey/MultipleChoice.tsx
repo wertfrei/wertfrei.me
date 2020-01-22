@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, SyntheticEvent } from 'react'
+import React, { useRef, useEffect, SyntheticEvent, useState } from 'react'
 import styled from 'styled-components'
 
 interface Props {
@@ -13,6 +13,7 @@ export default function MultipleChoice({
   onSelect,
 }: Props) {
   const ref = useRef<HTMLButtonElement>()
+  const [value, setValue] = useState<string>(null)
 
   useEffect(() => {
     if (!ref.current) return
@@ -22,7 +23,10 @@ export default function MultipleChoice({
 
   const handleClick = (key: string) => (e?: SyntheticEvent) => {
     if (e) e.preventDefault()
-    onSelect(key)
+    setValue(key)
+    setTimeout(() => {
+      onSelect(key)
+    }, 200)
   }
 
   function handleKey(e: React.KeyboardEvent) {
@@ -36,6 +40,11 @@ export default function MultipleChoice({
       {answers.map((v, i) => (
         <S.Button key={v} {...(i === 0 && { ref })} onClick={handleClick(v)}>
           {v}
+          {v === value && (
+            <svg height="13" width="16">
+              <path d="M14.293.293l1.414 1.414L5 12.414.293 7.707l1.414-1.414L5 9.586z" />
+            </svg>
+          )}
         </S.Button>
       ))}
     </S.Answers>
@@ -66,6 +75,7 @@ const S = {
     color: #000;
     cursor: pointer;
     background-color: #fff;
+    position: relative;
 
     &::before {
       counter-increment: choice;
@@ -82,16 +92,25 @@ const S = {
       background-color: #fff;
     }
 
+    svg {
+      position: absolute;
+      right: 0.5rem;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+    }
+
     &:hover {
       background-color: #eee;
 
-      &::before {
-        content: 'key ' counter(choice, upper-alpha);
-        position: relative;
-        width: auto;
-        width: 4rem;
-        margin-right: -1rem;
-        transform: translateX(-2rem);
+      @media (min-width: 769px) {
+        &::before {
+          content: 'key ' counter(choice, upper-alpha);
+          position: relative;
+          width: auto;
+          width: 4rem;
+          margin-right: -1rem;
+          transform: translateX(-2rem);
+        }
       }
     }
 
