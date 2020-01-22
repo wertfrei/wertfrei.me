@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import Input from '~/src/components/Input'
+import MultipleChoice from './MultipleChoice'
 import strings from '~/src/strings.json'
 import context from '~/src/context'
 
@@ -10,6 +11,7 @@ interface Props {
   question: {
     question: string
     key: string
+    answers: string[]
   }
 }
 
@@ -26,24 +28,32 @@ export default function Question({ question, onSubmit, active }: Props) {
     <S.Screen>
       <S.Question onSubmit={handleSubmit}>
         <label htmlFor={question.key}>{question.question}</label>
-        <Input
-          id={question.key}
-          placeholder={strings[language].type_here}
-          onChange={setValue}
-          focus={active}
-        />
-
-        <S.BtNext
-          type="submit"
-          data-state={
-            typeof value === 'string' && value.length > 0 ? 'active' : 'hidden'
-          }
-        >
-          OK
-          <svg height="13" width="16">
-            <path d="M14.293.293l1.414 1.414L5 12.414.293 7.707l1.414-1.414L5 9.586z" />
-          </svg>
-        </S.BtNext>
+        {!question.answers && (
+          <>
+            <Input
+              id={question.key}
+              placeholder={strings[language].type_here}
+              onChange={setValue}
+              focus={active}
+            />
+            <S.BtNext
+              type="submit"
+              data-state={
+                typeof value === 'string' && value.length > 0
+                  ? 'active'
+                  : 'hidden'
+              }
+            >
+              OK
+              <svg height="13" width="16">
+                <path d="M14.293.293l1.414 1.414L5 12.414.293 7.707l1.414-1.414L5 9.586z" />
+              </svg>
+            </S.BtNext>
+          </>
+        )}
+        {Array.isArray(question.answers) && (
+          <MultipleChoice answers={question.answers} />
+        )}
       </S.Question>
     </S.Screen>
   )
@@ -65,6 +75,8 @@ const S = {
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
     height: 10rem;
+    width: 45rem;
+    max-width: 90vw;
 
     label {
       display: block;
