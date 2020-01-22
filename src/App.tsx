@@ -6,7 +6,6 @@ import api from './api'
 import Home from './pages/Home'
 import Context, { defaultCtx, Language } from './context'
 import strs from './strings.json'
-import languages from './languages.json'
 import './styles/master.scss'
 
 const query = gql`
@@ -19,8 +18,11 @@ const query = gql`
         ... on BinaryData {
           value
         }
-        ... on LanguageData {
-          ${Object.keys(languages).join('\n')}
+        ... on RadarData {
+          items {
+            key
+            value
+          }
         }
       }
     }
@@ -38,11 +40,12 @@ function App() {
   useEffect(() => {
     if (!ctx.language) return
 
-    const prepRadarData = (data: { [key: string]: number }) => {
-      let valid = Object.entries(data).filter(([, v]) => typeof v === 'number')
-      if (valid.map(([k]) => k).every(code => code in languages))
-        valid = valid.map(([k, v]) => [languages[k][ctx.language], v])
-      return Object.fromEntries(valid)
+    const prepRadarData = (data: { items: { key; value }[] }) => {
+      return {
+        values: Object.fromEntries(
+          data.items.map(({ key, value }) => [key, value])
+        ),
+      }
     }
 
     api
@@ -55,6 +58,7 @@ function App() {
         )
         setCtx({ ...ctx, slides })
       })
+    // eslint-disable-next-line
   }, [ctx.language])
 
   return (

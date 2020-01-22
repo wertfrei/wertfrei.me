@@ -183,13 +183,15 @@ export function useRender(
           [i, i + 1].every(n => polygons[n].polygon.vertices.length) && {
             inter: interpolate(
               ...[i, i + 1].map(i =>
-                polygons[i].polygon.vertices.map(({ x, y }) => [x, y])
+                polygons[i].polygon.vertices.map(({ x, y }) =>
+                  [x, y].map(v => (isNaN(v) ? 0 : v))
+                )
               ),
               { string: false }
             ),
           }),
       }))
-  }, [width, height])
+  }, [width, height, slides])
 
   useEffect(() => {
     if (!ref.current) return

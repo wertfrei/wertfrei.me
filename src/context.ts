@@ -1,6 +1,5 @@
 import { createContext } from 'react'
 import strs from './strings.json'
-import slides from './slides.json'
 
 export type Language = 'en' | 'de'
 
@@ -23,7 +22,7 @@ const language = navigator.language.startsWith('de') ? 'de' : 'en'
 export const defaultCtx: Context = {
   language,
   strings: strs[language],
-  slides: slides as Slide[],
+  slides: [],
   setLanguage: () => {},
 }
 
