@@ -41,21 +41,20 @@ function App() {
     if (!ctx.language) return
 
     const prepRadarData = (data: { items: { key; value }[] }) => {
-      return {
-        values: Object.fromEntries(
-          data.items.map(({ key, value }) => [key, value])
-        ),
-      }
+      return Object.fromEntries(
+        data.items.map(({ key, value }) => [key, value])
+      )
     }
 
     api
       .query({ query, variables: { language: ctx.language.toUpperCase() } })
       .then(({ data }) => {
-        const slides = data.questions.map(({ question, answers, type, ...v }) =>
+        let slides = data.questions.map(({ question, answers, type, ...v }) =>
           type === 'BINARY'
             ? { question, answers, value: v.data.value }
             : { question, values: prepRadarData(v.data) }
         )
+        slides = [slides[0], slides.slice(-1)[0]]
         setCtx({ ...ctx, slides })
       })
     // eslint-disable-next-line
