@@ -33,7 +33,9 @@ export default function DrawLayer({ slide, label, onToggleLabel }: Props) {
       <S.Layer>
         <Canvas
           slide={Math.max(slide, 0)}
-          labelVisible={label && !('value' in slides[Math.max(slide, 0)])}
+          labelVisible={
+            label && !('value' in (slides[Math.max(slide, 0)] || {}))
+          }
         />
         {label && <Label slide={slide} />}
       </S.Layer>

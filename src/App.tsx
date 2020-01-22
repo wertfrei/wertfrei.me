@@ -49,12 +49,11 @@ function App() {
     api
       .query({ query, variables: { language: ctx.language.toUpperCase() } })
       .then(({ data }) => {
-        let slides = data.questions.map(({ question, answers, type, ...v }) =>
+        const slides = data.questions.map(({ question, answers, type, ...v }) =>
           type === 'BINARY'
             ? { question, answers, value: v.data.value }
             : { question, values: prepRadarData(v.data) }
         )
-        slides = [slides[0], slides.slice(-1)[0]]
         setCtx({ ...ctx, slides })
       })
     // eslint-disable-next-line
