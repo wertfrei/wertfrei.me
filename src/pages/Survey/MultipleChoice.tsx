@@ -1,15 +1,42 @@
-import React from 'react'
+import React, { useRef, useEffect, SyntheticEvent } from 'react'
 import styled from 'styled-components'
 
 interface Props {
   answers: string[]
+  focus?: boolean
+  onSelect(v: string): void
 }
 
-export default function MultipleChoice({ answers = [] }: Props) {
+export default function MultipleChoice({
+  answers = [],
+  focus = false,
+  onSelect,
+}: Props) {
+  const ref = useRef<HTMLButtonElement>()
+
+  useEffect(() => {
+    if (!ref.current) return
+    if (focus !== (ref.current === document.activeElement))
+      ref.current[focus ? 'focus' : 'blur']()
+  }, [ref, focus])
+
+  const handleClick = (key: string) => (e?: SyntheticEvent) => {
+    if (e) e.preventDefault()
+    onSelect(key)
+  }
+
+  function handleKey(e: React.KeyboardEvent) {
+    const input = e.key.toLowerCase().charCodeAt(0) - 97
+    if (input < 0 || input > Math.min(answers.length - 1, 25)) return
+    handleClick(answers[input])()
+  }
+
   return (
-    <S.Answers>
-      {answers.map(v => (
-        <S.Button key={v}>{v}</S.Button>
+    <S.Answers onKeyDown={handleKey}>
+      {answers.map((v, i) => (
+        <S.Button key={v} {...(i === 0 && { ref })} onClick={handleClick(v)}>
+          {v}
+        </S.Button>
       ))}
     </S.Answers>
   )
@@ -57,6 +84,19 @@ const S = {
 
     &:hover {
       background-color: #eee;
+
+      &::before {
+        content: 'key ' counter(choice, upper-alpha);
+        position: relative;
+        width: auto;
+        width: 4rem;
+        margin-right: -1rem;
+        transform: translateX(-2rem);
+      }
+    }
+
+    &:focus {
+      outline: none;
     }
   `,
 }

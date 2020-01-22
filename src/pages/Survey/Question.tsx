@@ -52,7 +52,11 @@ export default function Question({ question, onSubmit, active }: Props) {
           </>
         )}
         {Array.isArray(question.answers) && (
-          <MultipleChoice answers={question.answers} />
+          <MultipleChoice
+            answers={question.answers}
+            onSelect={onSubmit}
+            focus={active}
+          />
         )}
       </S.Question>
     </S.Screen>
