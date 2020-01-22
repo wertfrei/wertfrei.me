@@ -1,5 +1,40 @@
-import React from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import gql from 'graphql-tag'
+import api from '~/src/api'
+import context from '~/src/context'
+
+const query = gql`
+  query fetchSurvey($language: Language) {
+    survey(language: $language) {
+      key
+      question
+      answers
+    }
+  }
+`
+
+interface Question {
+  key: string
+  question: string
+  answers: string[]
+}
 
 export default function Survey() {
-  return <div>survey</div>
+  const { language } = useContext(context)
+  const [questions, setQuestions] = useState<Question[]>([])
+
+  useEffect(() => {
+    if (!language) return
+    api
+      .query({ query, variables: { language: language.toUpperCase() } })
+      .then(({ data }) => setQuestions(data.survey))
+  }, [language])
+
+  return (
+    <div>
+      {questions.map(({ key, question }) => (
+        <p key={key}>{question}</p>
+      ))}
+    </div>
+  )
 }
