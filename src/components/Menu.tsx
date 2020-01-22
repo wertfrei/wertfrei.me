@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
 import Language from './Language'
 import context from '~/src/context'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 export default function Menu() {
@@ -12,7 +13,7 @@ export default function Menu() {
       <S.Menu data-state={open ? 'open' : 'closed'}>
         <S.List>
           <li>
-            <a>{strings.menu_participate}</a>
+            <Link to="/survey">{strings.menu_participate}</Link>
           </li>
           <br />
           <li>
@@ -68,6 +69,11 @@ const S = {
     justify-content: space-between;
 
     line-height: 3rem;
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
   `,
 
   Hamburger: styled.button`

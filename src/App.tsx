@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import gql from 'graphql-tag'
 import api from './api'
 import Home from './pages/Home'
+import Survey from './pages/Survey'
 import Context, { defaultCtx, Language } from './context'
 import strs from './strings.json'
 import './styles/master.scss'
@@ -40,14 +41,19 @@ function App() {
   useEffect(() => {
     if (!ctx.language) return
 
-    const prepRadarData = (data: { items: { key; value }[] }) => {
+    const prepRadarData = (data: {
+      items: { key: string; value: number }[]
+    }) => {
       return Object.fromEntries(
         data.items.map(({ key, value }) => [key, value])
       )
     }
 
     api
-      .query({ query, variables: { language: ctx.language.toUpperCase() } })
+      .query({
+        query,
+        variables: { language: ctx.language.toUpperCase() },
+      })
       .then(({ data }) => {
         const slides = data.questions.map(({ question, answers, type, ...v }) =>
           type === 'BINARY'
@@ -56,7 +62,7 @@ function App() {
         )
         setCtx({ ...ctx, slides })
       })
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ctx.language])
 
   return (
@@ -64,6 +70,7 @@ function App() {
       <Router>
         <Switch>
           <Route path="/" exact component={Home} />
+          <Route path="/survey" exact component={Survey} />
         </Switch>
       </Router>
     </Context.Provider>
