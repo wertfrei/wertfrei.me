@@ -3,7 +3,10 @@ import styled from 'styled-components'
 import Question from './Question'
 
 interface Props {
-  question: string
+  question: {
+    question: string
+    key: string
+  }
 }
 
 export default function Screen({ question }: Props) {

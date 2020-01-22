@@ -33,8 +33,8 @@ export default function Survey() {
 
   return (
     <div>
-      {questions.map(({ key, question }) => (
-        <Screen key={key} question={question} />
+      {questions.map(question => (
+        <Screen key={question.key} question={question} />
       ))}
     </div>
   )
