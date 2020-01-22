@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import gql from 'graphql-tag'
 import api from '~/src/api'
 import context from '~/src/context'
-import Screen from './Survey/Screen'
+import Question from './Survey/Question'
 
 const query = gql`
   query fetchSurvey($language: Language) {
@@ -23,6 +23,12 @@ interface Question {
 export default function Survey() {
   const { language } = useContext(context)
   const [questions, setQuestions] = useState<Question[]>([])
+  const [active, setActive] = useState(0)
+
+  const onSubmit = (questionKey: string) => () => {
+    let subInd = questions.findIndex(({ key }) => key === questionKey)
+    if (subInd < questions.length - 1) setActive(subInd + 1)
+  }
 
   useEffect(() => {
     if (!language) return
@@ -32,10 +38,15 @@ export default function Survey() {
   }, [language])
 
   return (
-    <div>
-      {questions.map(question => (
-        <Screen key={question.key} question={question} />
+    <>
+      {questions.map((question, i) => (
+        <Question
+          key={question.key}
+          question={question}
+          onSubmit={onSubmit(question.key)}
+          active={i === active}
+        />
       ))}
-    </div>
+    </>
   )
 }

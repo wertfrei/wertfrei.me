@@ -21,6 +21,7 @@ body {
   scroll-snap-type: y mandatory;
   position: relative;
   color: var(--cl-black);
+  scroll-behavior: smooth;
 
   @media (max-width: 768px) {
     display: flex;

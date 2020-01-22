@@ -5,41 +5,60 @@ import strings from '~/src/strings.json'
 import context from '~/src/context'
 
 interface Props {
+  active?: boolean
+  onSubmit(): void
   question: {
     question: string
     key: string
   }
 }
 
-export default function Question({ question }: Props) {
+export default function Question({ question, onSubmit, active }: Props) {
   const { language } = useContext(context)
   const [value, setValue] = useState(null)
 
-  function onSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    onSubmit()
   }
 
   return (
-    <S.Question onSubmit={onSubmit}>
-      <label htmlFor={question.key}>{question.question}</label>
-      <Input
-        id={question.key}
-        placeholder={strings[language].type_here}
-        onChange={setValue}
-      />
-      {typeof value === 'string' && value.length > 0 && (
-        <S.BtNext type="submit">
+    <S.Screen>
+      <S.Question onSubmit={handleSubmit}>
+        <label htmlFor={question.key}>{question.question}</label>
+        <Input
+          id={question.key}
+          placeholder={strings[language].type_here}
+          onChange={setValue}
+          focus={active}
+        />
+
+        <S.BtNext
+          type="submit"
+          data-state={
+            typeof value === 'string' && value.length > 0 ? 'active' : 'hidden'
+          }
+        >
           OK
           <svg height="13" width="16">
             <path d="M14.293.293l1.414 1.414L5 12.414.293 7.707l1.414-1.414L5 9.586z" />
           </svg>
         </S.BtNext>
-      )}
-    </S.Question>
+      </S.Question>
+    </S.Screen>
   )
 }
 
 const S = {
+  Screen: styled.div`
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    position: relative;
+  `,
+
   Question: styled.form`
     position: absolute;
     left: 50%;
@@ -70,6 +89,12 @@ const S = {
     border-radius: 0.25rem;
     color: #000;
     cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+
+    &[data-state='hidden'] {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
 
     svg {
       margin-left: 0.7rem;

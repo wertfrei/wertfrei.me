@@ -1,14 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 
 interface Props {
   id?: string
   placeholder?: string
   onChange?(v: string): void
+  focus?: boolean
 }
 
-export default function Input({ id, placeholder, onChange }: Props) {
+export default function Input({
+  id,
+  placeholder,
+  onChange,
+  focus = false,
+}: Props) {
   const [value, setValue] = useState('')
+  const ref = useRef<HTMLInputElement>()
+
+  useEffect(() => {
+    if (!ref.current) return
+    if (focus !== (ref.current === document.activeElement))
+      ref.current[focus ? 'focus' : 'blur']()
+  }, [ref, focus])
 
   return (
     <S.Input
@@ -16,6 +29,7 @@ export default function Input({ id, placeholder, onChange }: Props) {
       placeholder={placeholder}
       value={value}
       autoComplete="off"
+      ref={ref}
       onChange={({ target }) => {
         setValue(target.value)
         if (onChange) onChange(target.value)
@@ -27,7 +41,7 @@ export default function Input({ id, placeholder, onChange }: Props) {
 const S = {
   Input: styled.input`
     font-size: 1.6rem;
-    width: 50rem;
+    width: 45rem;
     max-width: 90vw;
     border: none;
     border-bottom: 1px solid #bbb;
