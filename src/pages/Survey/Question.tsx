@@ -60,7 +60,7 @@ export default function Question({ question, onSubmit, active }: Props) {
           />
         )}
         {Array.isArray(question.answers) && question.answers.length > 2 && (
-          <Select answers={question.answers} />
+          <Select answers={question.answers} focus={active} />
         )}
       </S.Question>
     </S.Screen>

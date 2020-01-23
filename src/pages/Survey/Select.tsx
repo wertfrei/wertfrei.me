@@ -4,11 +4,13 @@ import styled from 'styled-components'
 interface Props {
   answers: string[]
   placeholder?: string
+  focus?: boolean
 }
 
 export default function Select({
   answers = [],
   placeholder = 'language',
+  focus = false,
 }: Props) {
   const [selectVisible, showSelect] = useState(false)
   const [values, setValues] = useState<string[]>([])
@@ -16,6 +18,13 @@ export default function Select({
   const [filtered, setFiltered] = useState(values)
   const [focused, setFocused] = useState('')
   const listRef = useRef<HTMLUListElement>()
+  const inputRef = useRef<HTMLInputElement>()
+
+  useEffect(() => {
+    if (!inputRef.current) return
+    if (focus !== (inputRef.current === document.activeElement))
+      inputRef.current[focus ? 'focus' : 'blur']()
+  }, [inputRef, focus])
 
   useEffect(() => {
     if (input === '')
@@ -63,6 +72,9 @@ export default function Select({
         setValues(values.slice(0, -1))
       return
     }
+    if (e.key === 'Escape') {
+      return (e.target as HTMLInputElement).blur()
+    }
     const current = filtered.findIndex(v => v === focused)
     if (e.key === 'ArrowDown')
       return setFocused(filtered[Math.min(current + 1, filtered.length - 1)])
@@ -77,7 +89,7 @@ export default function Select({
           <S.Tag key={v}>{v}</S.Tag>
         ))}
         <S.Input
-          placeholder={placeholder}
+          {...(values.length === 0 && { placeholder })}
           value={input}
           onChange={({ target }) => setInput(target.value)}
           onFocus={() => showSelect(true)}
@@ -85,6 +97,7 @@ export default function Select({
             setTimeout(() => showSelect(false), 200)
           }}
           onKeyDown={handleKey}
+          ref={inputRef}
         />
       </S.Head>
       {selectVisible && (
@@ -120,11 +133,11 @@ const S = {
     height: 3rem;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: flex-end;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
     padding: 0 0.5rem;
+    overflow-x: auto;
   `,
 
   Body: styled.ul`
