@@ -86,7 +86,21 @@ export default function Select({
     <S.Select>
       <S.Head>
         {values.map(v => (
-          <S.Tag key={v}>{v}</S.Tag>
+          <S.Tag
+            key={v}
+            onClick={() => {
+              setValues(values.filter(val => val !== v))
+              setTimeout(() => inputRef.current.focus(), 200)
+            }}
+          >
+            <span>{v}</span>
+            <svg width="32" height="32">
+              <polygon
+                xmlns="http://www.w3.org/2000/svg"
+                points="2,26 6,30 16,20 26,30 30,26 20,16 30,6 26,2 16,12 6,2 2,6 12,16  "
+              />
+            </svg>
+          </S.Tag>
         ))}
         <S.Input
           {...(values.length === 0 && { placeholder })}
@@ -94,7 +108,7 @@ export default function Select({
           onChange={({ target }) => setInput(target.value)}
           onFocus={() => showSelect(true)}
           onBlur={() => {
-            setTimeout(() => showSelect(false), 200)
+            setTimeout(() => showSelect(false), 100)
           }}
           onKeyDown={handleKey}
           ref={inputRef}
@@ -171,13 +185,18 @@ const S = {
   `,
 
   Tag: styled.div`
-    display: block;
+    display: flex;
+    align-items: center;
     height: 2rem;
-    line-height: 2rem;
     margin-top: 0.5rem;
     margin-right: 0.5rem;
-    padding: 0 0.5rem;
+    padding-left: 0.5rem;
     border: 1px solid #333;
     border-radius: 0.25rem;
+    cursor: pointer;
+
+    svg {
+      transform: scale(0.3);
+    }
   `,
 }
