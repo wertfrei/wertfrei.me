@@ -25,9 +25,11 @@ export default function Survey() {
   const { language } = useContext(context)
   const [questions, setQuestions] = useState<Question[]>([])
   const [active, setActive] = useState(0)
+  const [ident, setIdent] = useState(false)
 
   const onSubmit = (questionKey: string) => () => {
     let subInd = questions.findIndex(({ key }) => key === questionKey)
+    if (subInd === 0) setIdent(true)
     if (subInd < questions.length - 1) setActive(subInd + 1)
   }
 
@@ -62,7 +64,7 @@ export default function Survey() {
 
   return (
     <>
-      {questions.map((question, i) => (
+      {(ident ? questions : questions.slice(0, 1)).map((question, i) => (
         <Question
           key={question.key}
           question={question}

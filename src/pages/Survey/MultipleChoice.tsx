@@ -38,7 +38,11 @@ export default function MultipleChoice({
   return (
     <S.Answers onKeyDown={handleKey} tabIndex={0} ref={ref}>
       {answers.map(v => (
-        <S.Button key={v} onClick={handleClick(v)}>
+        <S.Button
+          key={v}
+          onClick={handleClick(v)}
+          {...(v === value && { 'aria-selected': true })}
+        >
           {v}
           {v === value && (
             <svg height="13" width="16">
@@ -90,7 +94,7 @@ const S = {
       width: 2rem;
       line-height: 2rem;
       margin-right: 1rem;
-      outline: 1px solid #333;
+      border: 1px solid #333;
       border-radius: 0.15rem;
       font-size: 1rem;
       background-color: #fff;
@@ -120,6 +124,28 @@ const S = {
 
     &:focus {
       outline: none;
+    }
+
+    &[aria-selected='true'] {
+      animation-name: selected;
+      animation-duration: 0.1s;
+      animation-direction: alternate;
+      animation-iteration-count: 4;
+
+      &::before {
+        background-color: #333;
+        color: #fff;
+        border: none;
+      }
+    }
+
+    @keyframes selected {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0.5;
+      }
     }
   `,
 }
