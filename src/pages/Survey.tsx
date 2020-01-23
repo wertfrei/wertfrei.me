@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 import api from '~/src/api'
 import context from '~/src/context'
 import Question from './Survey/Question'
+import Done from './Survey/Done'
 import debounce from 'lodash/debounce'
 
 const query = gql`
@@ -31,6 +32,10 @@ export default function Survey() {
     let subInd = questions.findIndex(({ key }) => key === questionKey)
     if (subInd === 0) setIdent(true)
     if (subInd < questions.length - 1) setActive(subInd + 1)
+    else {
+      document.querySelector('#root').scrollBy({ top: 1 })
+      setActive(null)
+    }
   }
 
   useEffect(() => {
@@ -38,7 +43,12 @@ export default function Survey() {
     api
       .query({ query, variables: { language: language.toUpperCase() } })
       .then(({ data }) =>
-        setQuestions([...data.survey.slice(1), data.survey[0]].reverse())
+        setQuestions(
+          [
+            ...data.survey.slice(2),
+            ...data.survey.slice(0, 2).reverse(),
+          ].reverse()
+        )
       )
   }, [language])
 
@@ -72,6 +82,7 @@ export default function Survey() {
           active={i === active}
         />
       ))}
+      {ident && <Done />}
     </>
   )
 }

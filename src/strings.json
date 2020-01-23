@@ -7,7 +7,9 @@
     "menu_filter": "Filteroptionen",
     "menu_privacy": "Datenschutz",
     "menu_impressum": "Impressum",
-    "type_here": "Gib deine Antwork hier ein…"
+    "type_here": "Gib deine Antwork hier ein…",
+    "thanks": "Danke fürs Mitmachen!",
+    "back": "zurück zur Startseite"
   },
   "en": {
     "intro_student": "Students in Germany.",
@@ -17,6 +19,8 @@
     "menu_filter": "filter options",
     "menu_privacy": "privacy",
     "menu_impressum": "impressum",
-    "type_here": "Type your answer here…"
+    "type_here": "Type your answer here…",
+    "thanks": "Thanks for your participation!",
+    "back": "back to homepage"
   }
 }
