@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 interface Props {
@@ -13,6 +13,40 @@ export default function Select({
   const [selectVisible, showSelect] = useState(false)
   const [values, setValues] = useState<string[]>([])
   const [input, setInput] = useState('')
+  const [filtered, setFiltered] = useState(values)
+  const [focused, setFocused] = useState('')
+
+  useEffect(() => {
+    if (input === '') return setFiltered(answers)
+    setFiltered(answers.filter(v => v.toLowerCase().startsWith(input)))
+  }, [input, answers])
+
+  useEffect(() => {
+    if (filtered.length === 0) return setFocused('')
+    if (!focused || !filtered.includes(focused)) setFocused(filtered[0])
+  }, [focused, filtered])
+
+  function handleKey(e: KeyboardEvent) {
+    if (e.key === 'Enter' || e.key === 'Tab') {
+      e.preventDefault()
+      if (focused) {
+        setValues([...values, focused])
+        setFocused('')
+        setInput('')
+      }
+      return
+    }
+    if (e.key === 'Backspace') {
+      if (input.length === 0 && values.length > 0)
+        setValues(values.slice(0, -1))
+      return
+    }
+    const current = filtered.findIndex(v => v === focused)
+    if (e.key === 'ArrowDown')
+      return setFocused(filtered[Math.min(current + 1, filtered.length - 1)])
+    if (e.key === 'ArrowUp')
+      return setFocused(filtered[Math.max(current - 1, 0)])
+  }
 
   return (
     <S.Select>
@@ -28,17 +62,20 @@ export default function Select({
           onBlur={() => {
             setTimeout(() => showSelect(false), 200)
           }}
+          onKeyDown={handleKey}
         />
       </S.Head>
       {selectVisible && (
         <S.Body>
-          {answers.map(v => (
+          {filtered.map(v => (
             <li
               key={v}
               onClick={() => {
                 setValues([...values, v])
                 setInput('')
               }}
+              onMouseOver={() => setFocused(v)}
+              {...(v === focused && { 'aria-selected': true })}
             >
               {v}
             </li>
@@ -54,6 +91,7 @@ const S = {
     width: 45rem;
     max-width: 90vw;
     border: solid 1px black;
+    border-radius: 0.25rem;
   `,
 
   Head: styled.div`
@@ -68,7 +106,7 @@ const S = {
   `,
 
   Body: styled.ul`
-    max-height: 12rem;
+    max-height: 15rem;
     overflow-y: auto;
 
     li {
@@ -79,8 +117,8 @@ const S = {
       color: #333;
       cursor: pointer;
 
-      &:hover {
-        background-color: #ddd;
+      &[aria-selected='true'] {
+        background-color: #eee;
       }
     }
   `,
