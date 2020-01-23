@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 import api from '~/src/api'
 import context from '~/src/context'
 import Question from './Survey/Question'
+import debounce from 'lodash/debounce'
 
 const query = gql`
   query fetchSurvey($language: Language) {
@@ -38,6 +39,26 @@ export default function Survey() {
         setQuestions([...data.survey.slice(1), data.survey[0]].reverse())
       )
   }, [language])
+
+  useEffect(() => {
+    const handleScroll = debounce(
+      () => {
+        const root = document.querySelector('#root')
+        const slide =
+          window.innerWidth > 768
+            ? root.scrollTop / window.innerHeight
+            : root.scrollLeft / window.innerWidth
+        if (active !== slide) setActive(slide)
+      },
+      100,
+      { leading: false, trailing: true }
+    )
+    document.querySelector('#root').addEventListener('scroll', handleScroll)
+    return () =>
+      document
+        .querySelector('#root')
+        .removeEventListener('scroll', handleScroll)
+  }, [active])
 
   return (
     <>

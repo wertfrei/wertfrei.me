@@ -30,6 +30,9 @@ export default function Input({
       value={value}
       autoComplete="off"
       ref={ref}
+      onKeyDown={(e: KeyboardEvent) => {
+        if (e.key === 'Escape') (e.target as HTMLInputElement).blur()
+      }}
       onChange={({ target }) => {
         setValue(target.value)
         if (onChange) onChange(target.value)

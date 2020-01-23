@@ -5,12 +5,16 @@ interface Props {
   answers: string[]
   placeholder?: string
   focus?: boolean
+  onChange(v: string[]): void
+  blockNext(v: boolean): void
 }
 
 export default function Select({
   answers = [],
   placeholder = 'language',
   focus = false,
+  onChange,
+  blockNext,
 }: Props) {
   const [selectVisible, showSelect] = useState(false)
   const [values, setValues] = useState<string[]>([])
@@ -57,11 +61,16 @@ export default function Select({
       listRef.current.scrollBy({ top: focusTop - listTop })
   }, [focused])
 
+  function changeValues(values: string[]) {
+    setValues(values)
+    onChange(values)
+  }
+
   function handleKey(e: KeyboardEvent) {
     if (e.key === 'Enter' || e.key === 'Tab') {
       e.preventDefault()
       if (focused) {
-        setValues([...values, focused])
+        changeValues([...values, focused])
         setFocused('')
         setInput('')
       }
@@ -69,7 +78,7 @@ export default function Select({
     }
     if (e.key === 'Backspace') {
       if (input.length === 0 && values.length > 0)
-        setValues(values.slice(0, -1))
+        changeValues(values.slice(0, -1))
       return
     }
     if (e.key === 'Escape') {
@@ -89,7 +98,7 @@ export default function Select({
           <S.Tag
             key={v}
             onClick={() => {
-              setValues(values.filter(val => val !== v))
+              changeValues(values.filter(val => val !== v))
               setTimeout(() => inputRef.current.focus(), 200)
             }}
           >
@@ -106,13 +115,30 @@ export default function Select({
           {...(values.length === 0 && { placeholder })}
           value={input}
           onChange={({ target }) => setInput(target.value)}
-          onFocus={() => showSelect(true)}
+          onFocus={() => {
+            blockNext(true)
+            showSelect(true)
+          }}
           onBlur={() => {
-            setTimeout(() => showSelect(false), 100)
+            setTimeout(() => {
+              showSelect(false)
+              blockNext(false)
+            }, 100)
           }}
           onKeyDown={handleKey}
           ref={inputRef}
         />
+        {document.activeElement !== inputRef.current && (
+          <svg
+            width="24"
+            height="24"
+            onClick={() => {
+              inputRef.current.focus()
+            }}
+          >
+            <path d="M7 10l5 5 5-5z" />
+          </svg>
+        )}
       </S.Head>
       {selectVisible && (
         <S.Body ref={listRef}>
@@ -120,7 +146,7 @@ export default function Select({
             <li
               key={v}
               onClick={() => {
-                setValues([...values, v])
+                changeValues([...values, v])
                 setInput('')
               }}
               onMouseOver={() => setFocused(v)}
@@ -141,6 +167,7 @@ const S = {
     max-width: 90vw;
     border: solid 1px black;
     border-radius: 0.25rem;
+    margin-bottom: 2rem;
   `,
 
   Head: styled.div`
@@ -152,6 +179,13 @@ const S = {
     flex-direction: row;
     padding: 0 0.5rem;
     overflow-x: auto;
+
+    & > svg {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
   `,
 
   Body: styled.ul`

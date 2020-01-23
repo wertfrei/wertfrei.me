@@ -18,49 +18,61 @@ interface Props {
 
 export default function Question({ question, onSubmit, active }: Props) {
   const { language } = useContext(context)
-  const [value, setValue] = useState(null)
+  const [value, setValue] = useState<string | string[]>(null)
+  const [blockNext, setBlockNext] = useState(false)
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     onSubmit()
   }
 
+  const type = !question.answers
+    ? 'free'
+    : !Array.isArray(question.answers)
+    ? null
+    : question.answers.length === 2
+    ? 'binary'
+    : 'select'
+
   return (
     <S.Screen>
       <S.Question onSubmit={handleSubmit}>
         <label htmlFor={question.key}>{question.question}</label>
-        {!question.answers && (
-          <>
-            <Input
-              id={question.key}
-              placeholder={strings[language].type_here}
-              onChange={setValue}
-              focus={active}
-            />
-            <S.BtNext
-              type="submit"
-              data-state={
-                typeof value === 'string' && value.length > 0
-                  ? 'active'
-                  : 'hidden'
-              }
-            >
-              OK
-              <svg height="13" width="16">
-                <path d="M14.293.293l1.414 1.414L5 12.414.293 7.707l1.414-1.414L5 9.586z" />
-              </svg>
-            </S.BtNext>
-          </>
+        {type === 'free' && (
+          <Input
+            id={question.key}
+            placeholder={strings[language].type_here}
+            onChange={setValue}
+            focus={active}
+          />
         )}
-        {Array.isArray(question.answers) && question.answers.length === 2 && (
+        {type === 'binary' && (
           <MultipleChoice
             answers={question.answers}
             onSelect={onSubmit}
             focus={active}
           />
         )}
-        {Array.isArray(question.answers) && question.answers.length > 2 && (
-          <Select answers={question.answers} focus={active} />
+        {type === 'select' && (
+          <Select
+            answers={question.answers}
+            focus={active}
+            onChange={setValue}
+            blockNext={setBlockNext}
+          />
+        )}
+        {(type === 'free' || type === 'select') && (
+          <S.BtNext
+            type="submit"
+            data-state={
+              !!value && value.length > 0 && !blockNext ? 'active' : 'hidden'
+            }
+          >
+            OK
+            <svg height="13" width="16">
+              <path d="M14.293.293l1.414 1.414L5 12.414.293 7.707l1.414-1.414L5 9.586z" />
+            </svg>
+          </S.BtNext>
         )}
       </S.Question>
     </S.Screen>
