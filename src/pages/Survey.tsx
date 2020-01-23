@@ -34,7 +34,9 @@ export default function Survey() {
     if (!language) return
     api
       .query({ query, variables: { language: language.toUpperCase() } })
-      .then(({ data }) => setQuestions(data.survey))
+      .then(({ data }) =>
+        setQuestions([data.survey[0], data.survey.slice(-1)[0]].reverse())
+      )
   }, [language])
 
   return (

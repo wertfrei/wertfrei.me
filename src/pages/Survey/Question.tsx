@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import Input from '~/src/components/Input'
 import MultipleChoice from './MultipleChoice'
+import Select from './Select'
 import strings from '~/src/strings.json'
 import context from '~/src/context'
 
@@ -51,12 +52,15 @@ export default function Question({ question, onSubmit, active }: Props) {
             </S.BtNext>
           </>
         )}
-        {Array.isArray(question.answers) && (
+        {Array.isArray(question.answers) && question.answers.length === 2 && (
           <MultipleChoice
             answers={question.answers}
             onSelect={onSubmit}
             focus={active}
           />
+        )}
+        {Array.isArray(question.answers) && question.answers.length > 2 && (
+          <Select answers={question.answers} />
         )}
       </S.Question>
     </S.Screen>
@@ -82,14 +86,14 @@ const S = {
     width: 45rem;
     max-width: 90vw;
 
-    label {
+    & > label {
       display: block;
       font-size: 1.4rem;
       margin-bottom: 2rem;
       color: #333;
     }
 
-    input {
+    & > input {
       margin-bottom: 2rem;
     }
   `,
