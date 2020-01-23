@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useRef } from 'react'
 import styled from 'styled-components'
 import Input from '~/src/components/Input'
 import MultipleChoice from './MultipleChoice'
@@ -20,6 +20,7 @@ export default function Question({ question, onSubmit, active }: Props) {
   const { language } = useContext(context)
   const [value, setValue] = useState<string | string[]>(null)
   const [blockNext, setBlockNext] = useState(false)
+  const nextRef = useRef<HTMLButtonElement>()
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -58,7 +59,13 @@ export default function Question({ question, onSubmit, active }: Props) {
             answers={question.answers}
             focus={active}
             onChange={setValue}
-            blockNext={setBlockNext}
+            blockNext={v => {
+              if (v) return setBlockNext(true)
+              setBlockNext(false)
+              setTimeout(() => {
+                if (nextRef.current) nextRef.current.focus()
+              }, 100)
+            }}
           />
         )}
         {(type === 'free' || type === 'select') && (
@@ -67,6 +74,7 @@ export default function Question({ question, onSubmit, active }: Props) {
             data-state={
               !!value && value.length > 0 && !blockNext ? 'active' : 'hidden'
             }
+            ref={nextRef}
           >
             OK
             <svg height="13" width="16">

@@ -19,9 +19,11 @@ export default function Input({
 
   useEffect(() => {
     if (!ref.current) return
-    if (focus !== (ref.current === document.activeElement))
-      ref.current[focus ? 'focus' : 'blur']()
-  }, [ref, focus])
+    if (focus !== (ref.current === document.activeElement)) {
+      if (!focus) ref.current.blur()
+      else if (value.length === 0) ref.current.focus()
+    }
+  }, [ref, focus, value.length])
 
   return (
     <S.Input

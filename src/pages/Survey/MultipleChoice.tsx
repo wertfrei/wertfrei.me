@@ -36,9 +36,9 @@ export default function MultipleChoice({
   }
 
   return (
-    <S.Answers onKeyDown={handleKey}>
-      {answers.map((v, i) => (
-        <S.Button key={v} {...(i === 0 && { ref })} onClick={handleClick(v)}>
+    <S.Answers onKeyDown={handleKey} tabIndex={0} ref={ref}>
+      {answers.map(v => (
+        <S.Button key={v} onClick={handleClick(v)}>
           {v}
           {v === value && (
             <svg height="13" width="16">
@@ -58,6 +58,10 @@ const S = {
     justify-content: flex-start;
     align-items: flex-start;
     counter-reset: choice;
+
+    &:focus {
+      outline: none;
+    }
   `,
 
   Button: styled.button`

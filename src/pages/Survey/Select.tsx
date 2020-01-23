@@ -26,9 +26,11 @@ export default function Select({
 
   useEffect(() => {
     if (!inputRef.current) return
-    if (focus !== (inputRef.current === document.activeElement))
-      inputRef.current[focus ? 'focus' : 'blur']()
-  }, [inputRef, focus])
+    if (focus !== (inputRef.current === document.activeElement)) {
+      if (!focus) inputRef.current.blur()
+      else if (values.length === 0) inputRef.current.focus()
+    }
+  }, [inputRef, focus, values.length])
 
   useEffect(() => {
     if (input === '')
