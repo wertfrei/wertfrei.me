@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 interface Props {
@@ -15,16 +15,38 @@ export default function Select({
   const [input, setInput] = useState('')
   const [filtered, setFiltered] = useState(values)
   const [focused, setFocused] = useState('')
+  const listRef = useRef<HTMLUListElement>()
 
   useEffect(() => {
-    if (input === '') return setFiltered(answers)
-    setFiltered(answers.filter(v => v.toLowerCase().startsWith(input)))
-  }, [input, answers])
+    if (input === '')
+      return setFiltered(answers.filter(v => !values.includes(v)))
+    setFiltered(
+      answers.filter(
+        v => v.toLowerCase().startsWith(input) && !values.includes(v)
+      )
+    )
+  }, [input, answers, values])
 
   useEffect(() => {
     if (filtered.length === 0) return setFocused('')
     if (!focused || !filtered.includes(focused)) setFocused(filtered[0])
   }, [focused, filtered])
+
+  useEffect(() => {
+    if (!listRef.current) return
+    const focusedEl = Array.from(listRef.current.querySelectorAll('li')).find(
+      item => item.innerHTML === focused
+    )
+    if (!focusedEl) return
+    const focusTop = focusedEl.offsetTop
+    const focusBottom = focusTop + focusedEl.offsetHeight
+    const listTop = listRef.current.offsetTop + listRef.current.scrollTop
+    const listBottom = listTop + listRef.current.offsetHeight
+    if (focusBottom > listBottom)
+      listRef.current.scrollBy({ top: focusBottom - listBottom })
+    else if (focusTop < listTop)
+      listRef.current.scrollBy({ top: focusTop - listTop })
+  }, [focused])
 
   function handleKey(e: KeyboardEvent) {
     if (e.key === 'Enter' || e.key === 'Tab') {
@@ -66,7 +88,7 @@ export default function Select({
         />
       </S.Head>
       {selectVisible && (
-        <S.Body>
+        <S.Body ref={listRef}>
           {filtered.map(v => (
             <li
               key={v}
