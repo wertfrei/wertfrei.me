@@ -25,6 +25,9 @@ const query = gql`
             value
           }
         }
+        ... on ScaleData {
+          values
+        }
       }
     }
   }
@@ -58,7 +61,9 @@ function App() {
         const slides = data.questions.map(({ question, answers, type, ...v }) =>
           type === 'BINARY'
             ? { question, answers, value: v.data.value }
-            : { question, values: prepRadarData(v.data) }
+            : type === 'RADAR'
+            ? { question, values: prepRadarData(v.data) }
+            : { question, answers, values: v.data.values }
         )
         setCtx({ ...ctx, slides })
       })
