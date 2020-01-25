@@ -86,7 +86,7 @@ const S = {
 
     &[data-unit] {
       & > input {
-        padding-right: 2.5rem;
+        padding-right: ${(props: any) => (props['data-unit'] || '').length}ch;
       }
 
       &::after {

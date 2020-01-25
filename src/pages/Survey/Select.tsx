@@ -185,7 +185,6 @@ const S = {
     max-width: 90vw;
     border: solid 1px black;
     border-radius: 0.25rem;
-    margin-bottom: 2rem;
   `,
 
   Head: styled.div`
