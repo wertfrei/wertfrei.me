@@ -4,7 +4,7 @@ import styled from 'styled-components'
 interface Props {
   id?: string
   placeholder?: string
-  onChange?(v: string): void
+  onChange?(v: string | number): void
   focus?: boolean
   type?: string
   unit?: string
@@ -44,7 +44,10 @@ export default function Input({
         }}
         onChange={({ target }) => {
           setValue(target.value)
-          if (onChange) onChange(target.value)
+          if (onChange)
+            onChange(
+              type === 'number' ? parseFloat(target.value) : target.value
+            )
         }}
         type={type}
         {...(spin === false && { 'data-spin': false })}

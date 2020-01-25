@@ -41,10 +41,16 @@ export default function Survey() {
     setAnswers({ ...answers, [questionKey]: value })
     const { ident, uni } = answers
     if (ident && uni) {
-      console.log('submit', questionKey)
       api.mutate({
         mutation: submit,
-        variables: { answer: { id: ident, uni, key: questionKey, value } },
+        variables: {
+          answer: {
+            id: ident,
+            uni,
+            key: questionKey,
+            value: JSON.stringify(value),
+          },
+        },
       })
     }
     let subInd = questions.findIndex(({ key }) => key === questionKey)

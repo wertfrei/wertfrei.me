@@ -4,7 +4,7 @@ import styled from 'styled-components'
 interface Props {
   answers: string[]
   focus?: boolean
-  onSelect(v: string): void
+  onSelect(v: boolean): void
 }
 
 export default function MultipleChoice({
@@ -25,7 +25,7 @@ export default function MultipleChoice({
     if (e) e.preventDefault()
     setValue(key)
     setTimeout(() => {
-      onSelect(key)
+      onSelect(key === answers[0])
     }, 200)
   }
 

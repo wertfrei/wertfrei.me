@@ -21,7 +21,7 @@ interface Props {
 
 export default function Question({ question, onSubmit, active }: Props) {
   const { language } = useContext(context)
-  const [value, setValue] = useState<string | string[]>(null)
+  const [value, setValue] = useState<string | string[] | number>(null)
   const [blockNext, setBlockNext] = useState(false)
   const nextRef = useRef<HTMLButtonElement>()
 
@@ -48,9 +48,8 @@ export default function Question({ question, onSubmit, active }: Props) {
             placeholder={strings[language].type_here}
             onChange={setValue}
             focus={active}
-            type="number"
             unit={question.unit}
-            spin={question.key !== 'ident'}
+            {...(question.key !== 'ident' && { type: 'number', spin: true })}
           />
         )}
         {type === 'binary' && (
@@ -80,7 +79,11 @@ export default function Question({ question, onSubmit, active }: Props) {
           <S.BtNext
             type="submit"
             data-state={
-              !!value && value.length > 0 && !blockNext ? 'active' : 'hidden'
+              !!value &&
+              (Array.isArray(value) ? value : value.toString()).length > 0 &&
+              !blockNext
+                ? 'active'
+                : 'hidden'
             }
             ref={nextRef}
           >
