@@ -10,6 +10,12 @@ interface Slide {
   values?: { [key: string]: number } | [number, number][]
 }
 
+export interface ScaleSlide extends Slide {
+  values: [number, number][]
+  step: number
+  unit: string
+}
+
 interface Context {
   language: Language
   strings: typeof strs.en

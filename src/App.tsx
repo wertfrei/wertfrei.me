@@ -28,6 +28,7 @@ const query = gql`
         ... on ScaleData {
           values
           unit
+          step
         }
       }
     }
@@ -65,7 +66,11 @@ function App() {
               ? { question, answers, value: v.data.value }
               : type === 'RADAR'
               ? { question, values: prepRadarData(v.data) }
-              : { question, answers, values: v.data.values, unit: v.data.unit }
+              : {
+                  question,
+                  answers,
+                  ...v.data,
+                }
           )
           .reverse()
         setCtx({ ...ctx, slides })

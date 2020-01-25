@@ -81,10 +81,13 @@ function renderRadar(values: number[], width: number, height: number): Polygon {
 
 function renderArea(
   values: [number, number][],
+  step: number,
   width: number,
   height: number
 ): Polygon {
-  values = values.sort(([a], [b]) => a - b)
+  values = values
+    .map(([k, v]) => [k / step, v] as [number, number])
+    .sort(([a], [b]) => a - b)
   const minX = Math.min(...values.map(([v]) => v))
   const maxX = Math.max(...values.map(([v]) => v))
   const maxY = Math.max(...values.map(([, v]) => v))
@@ -113,7 +116,13 @@ const renderSlide = (slides: any[], width: number, height: number) => <
   else if ('values' in slide) {
     if (!Array.isArray(slide.values))
       return renderRadar(Object.values(slide.values), width, height)
-    else return renderArea(slide.values as [number, number][], width, height)
+    else
+      return renderArea(
+        slide.values as [number, number][],
+        slide.step,
+        width,
+        height
+      )
   }
   return new Polygon()
 }

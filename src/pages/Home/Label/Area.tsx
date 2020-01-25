@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useMouseX } from '../../../utils/hooks'
 import styled from 'styled-components'
-import context from '~/src/context'
+import context, { ScaleSlide } from '~/src/context'
 
 const { format } = new Intl.NumberFormat('de-DE', { style: 'decimal' })
 
@@ -9,18 +9,19 @@ export default function Area({ slide }) {
   const { slides } = useContext(context)
   const [maxY, setMaxY] = useState(0)
   const x = useMouseX()
-  const values = slides[slide].values as [number, number][]
-  const unit = (slides[slide] as any).unit
+  const { values, unit, step } = slides[slide] as ScaleSlide
 
   useEffect(() => {
     setMaxY(Math.max(...values.map(([, v]) => v)))
   }, [values])
 
-  const cm = Math.round(
-    ((x - (window.innerWidth / 5) * 2) / ((window.innerWidth / 5) * 3)) *
-      (values[values.length - 1][0] - values[0][0]) +
-      values[0][0]
-  )
+  const cm =
+    Math.round(
+      (((x - (window.innerWidth / 5) * 2) / ((window.innerWidth / 5) * 3)) *
+        (values[values.length - 1][0] - values[0][0]) +
+        values[0][0]) /
+        step
+    ) * step
   const num = ((slides[slide].values as [number, number][]).find(
     ([v]) => v === cm
   ) || [0, 0])[1]
@@ -31,7 +32,7 @@ export default function Area({ slide }) {
       <S.Label>
         {num}
         <span>
-          {format(cm / 100)}
+          {format(cm)}
           {unit}
         </span>
       </S.Label>
