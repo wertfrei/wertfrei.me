@@ -6,8 +6,9 @@ interface Props {
   answers: string[]
   placeholder?: string
   focus?: boolean
-  onChange(v: string[]): void
+  onChange(v: string[] | string): void
   blockNext(v: boolean): void
+  limit?: number
 }
 
 export default function Select({
@@ -16,6 +17,7 @@ export default function Select({
   focus = false,
   onChange,
   blockNext,
+  limit,
 }: Props) {
   const [selectVisible, showSelect] = useState(false)
   const [values, setValues] = useState<string[]>([])
@@ -23,8 +25,18 @@ export default function Select({
   const [input, setInput] = useState('')
   const [filtered, setFiltered] = useState(values)
   const [focused, setFocused] = useState('')
+  const [disabled, setDisabled] = useState(false)
   const listRef = useRef<HTMLUListElement>()
   const inputRef = useRef<HTMLInputElement>()
+
+  useEffect(() => {
+    if (!limit) return
+    setDisabled(values.length >= limit)
+    if (values.length >= limit) {
+      setDisabled(true)
+      inputRef.current.blur()
+    } else setDisabled(false)
+  }, [limit, values.length])
 
   useEffect(() => {
     setFuse(
@@ -81,7 +93,7 @@ export default function Select({
 
   function changeValues(values: string[]) {
     setValues(values)
-    onChange(values)
+    onChange(limit !== 1 ? values : values[0])
   }
 
   function handleKey(e: KeyboardEvent) {
@@ -129,6 +141,7 @@ export default function Select({
             </svg>
           </S.Tag>
         ))}
+
         <S.Input
           {...(values.length === 0 && { placeholder })}
           value={input}
@@ -145,7 +158,9 @@ export default function Select({
           }}
           onKeyDown={handleKey}
           ref={inputRef}
+          disabled={disabled}
         />
+
         {document.activeElement !== inputRef.current && (
           <svg
             width="24"
@@ -158,7 +173,7 @@ export default function Select({
           </svg>
         )}
       </S.Head>
-      {selectVisible && (
+      {selectVisible && !disabled && (
         <S.Body ref={listRef}>
           {filtered.map(v => (
             <li

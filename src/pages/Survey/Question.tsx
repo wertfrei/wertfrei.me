@@ -15,6 +15,7 @@ interface Props {
     answers: string[]
     unit?: string
     placeholder?: string
+    limit?: number
   }
 }
 
@@ -63,6 +64,7 @@ export default function Question({ question, onSubmit, active }: Props) {
           <Select
             answers={question.answers}
             placeholder={question.placeholder}
+            limit={question.limit}
             focus={active}
             onChange={setValue}
             blockNext={v => {
