@@ -79,7 +79,8 @@ export default function Question({ question, onSubmit, active }: Props) {
           <S.BtNext
             type="submit"
             data-state={
-              !!value &&
+              value !== undefined &&
+              value !== null &&
               (Array.isArray(value) ? value : value.toString()).length > 0 &&
               !blockNext
                 ? 'active'
