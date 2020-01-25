@@ -10,6 +10,7 @@ export default function Area({ slide }) {
   const [maxY, setMaxY] = useState(0)
   const x = useMouseX()
   const values = slides[slide].values as [number, number][]
+  const unit = (slides[slide] as any).unit
 
   useEffect(() => {
     setMaxY(Math.max(...values.map(([, v]) => v)))
@@ -29,7 +30,10 @@ export default function Area({ slide }) {
     <>
       <S.Label>
         {num}
-        <span>{format(cm / 100)}m</span>
+        <span>
+          {format(cm / 100)}
+          {unit}
+        </span>
       </S.Label>
       <S.Cursor hidden pos={x} normY={num / maxY} />
     </>

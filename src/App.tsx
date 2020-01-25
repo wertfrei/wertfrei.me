@@ -27,6 +27,7 @@ const query = gql`
         }
         ... on ScaleData {
           values
+          unit
         }
       }
     }
@@ -58,13 +59,15 @@ function App() {
         variables: { language: ctx.language.toUpperCase() },
       })
       .then(({ data }) => {
-        const slides = data.questions.map(({ question, answers, type, ...v }) =>
-          type === 'BINARY'
-            ? { question, answers, value: v.data.value }
-            : type === 'RADAR'
-            ? { question, values: prepRadarData(v.data) }
-            : { question, answers, values: v.data.values }
-        )
+        const slides = data.questions
+          .map(({ question, answers, type, ...v }) =>
+            type === 'BINARY'
+              ? { question, answers, value: v.data.value }
+              : type === 'RADAR'
+              ? { question, values: prepRadarData(v.data) }
+              : { question, answers, values: v.data.values, unit: v.data.unit }
+          )
+          .reverse()
         setCtx({ ...ctx, slides })
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps
