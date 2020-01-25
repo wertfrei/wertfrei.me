@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
+import Fuse from 'fuse.js'
 
 interface Props {
   answers: string[]
@@ -18,11 +19,25 @@ export default function Select({
 }: Props) {
   const [selectVisible, showSelect] = useState(false)
   const [values, setValues] = useState<string[]>([])
+  const [fuse, setFuse] = useState()
   const [input, setInput] = useState('')
   const [filtered, setFiltered] = useState(values)
   const [focused, setFocused] = useState('')
   const listRef = useRef<HTMLUListElement>()
   const inputRef = useRef<HTMLInputElement>()
+
+  useEffect(() => {
+    setFuse(
+      new Fuse(
+        answers.map(name => ({ name })),
+        {
+          shouldSort: true,
+          threshold: 0.3,
+          keys: ['name'],
+        }
+      )
+    )
+  }, [answers])
 
   useEffect(() => {
     if (!inputRef.current) return
@@ -36,11 +51,12 @@ export default function Select({
     if (input === '')
       return setFiltered(answers.filter(v => !values.includes(v)))
     setFiltered(
-      answers.filter(
-        v => v.toLowerCase().startsWith(input) && !values.includes(v)
-      )
+      fuse
+        .search(input)
+        .map(({ name }) => name)
+        .filter(v => !values.includes(v))
     )
-  }, [input, answers, values])
+  }, [input, answers, values, fuse])
 
   useEffect(() => {
     if (filtered.length === 0) return setFocused('')
