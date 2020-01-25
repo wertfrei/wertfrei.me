@@ -13,6 +13,7 @@ interface Props {
     question: string
     key: string
     answers: string[]
+    unit?: string
   }
 }
 
@@ -45,6 +46,9 @@ export default function Question({ question, onSubmit, active }: Props) {
             placeholder={strings[language].type_here}
             onChange={setValue}
             focus={active}
+            type="number"
+            unit={question.unit}
+            spin={question.key !== 'ident'}
           />
         )}
         {type === 'binary' && (
@@ -113,8 +117,8 @@ const S = {
       color: #333;
     }
 
-    & > input {
-      margin-bottom: 2rem;
+    & > button {
+      margin-top: 2rem;
     }
   `,
 

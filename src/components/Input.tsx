@@ -6,6 +6,9 @@ interface Props {
   placeholder?: string
   onChange?(v: string): void
   focus?: boolean
+  type?: string
+  unit?: string
+  spin?: boolean
 }
 
 export default function Input({
@@ -13,6 +16,9 @@ export default function Input({
   placeholder,
   onChange,
   focus = false,
+  type,
+  unit,
+  spin,
 }: Props) {
   const [value, setValue] = useState('')
   const ref = useRef<HTMLInputElement>()
@@ -26,20 +32,24 @@ export default function Input({
   }, [ref, focus, value.length])
 
   return (
-    <S.Input
-      id={id}
-      placeholder={placeholder}
-      value={value}
-      autoComplete="off"
-      ref={ref}
-      onKeyDown={(e: KeyboardEvent) => {
-        if (e.key === 'Escape') (e.target as HTMLInputElement).blur()
-      }}
-      onChange={({ target }) => {
-        setValue(target.value)
-        if (onChange) onChange(target.value)
-      }}
-    />
+    <S.Wrap {...(unit && { 'data-unit': unit })}>
+      <S.Input
+        id={id}
+        placeholder={placeholder}
+        value={value}
+        autoComplete="off"
+        ref={ref}
+        onKeyDown={(e: KeyboardEvent) => {
+          if (e.key === 'Escape') (e.target as HTMLInputElement).blur()
+        }}
+        onChange={({ target }) => {
+          setValue(target.value)
+          if (onChange) onChange(target.value)
+        }}
+        type={type}
+        {...(spin === false && { 'data-spin': false })}
+      />
+    </S.Wrap>
   )
 }
 
@@ -52,6 +62,8 @@ const S = {
     border-bottom: 1px solid #bbb;
     line-height: 3rem;
     transition: border-color 0.15s ease;
+    font-family: inherit;
+    box-sizing: border-box;
 
     &:focus {
       border-color: transparent;
@@ -60,6 +72,32 @@ const S = {
 
     &:placeholder {
       color: #bbb;
+    }
+
+    &[data-spin='false']::-webkit-outer-spin-button,
+    &[data-spin='false']::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  `,
+
+  Wrap: styled.div`
+    position: relative;
+
+    &[data-unit] {
+      & > input {
+        padding-right: 2.5rem;
+      }
+
+      &::after {
+        content: attr(data-unit);
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        font-size: 1.6rem;
+        line-height: 3rem;
+      }
     }
   `,
 }

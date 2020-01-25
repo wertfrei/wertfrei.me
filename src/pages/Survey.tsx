@@ -12,6 +12,7 @@ const query = gql`
       key
       question
       answers
+      unit
     }
   }
 `
