@@ -13,6 +13,7 @@ const query = gql`
       question
       answers
       unit
+      placeholder
     }
   }
 `
@@ -27,11 +28,15 @@ export default function Survey() {
   const { language } = useContext(context)
   const [questions, setQuestions] = useState<Question[]>([])
   const [active, setActive] = useState(0)
-  const [ident, setIdent] = useState(false)
+  const [answers, setAnswers] = useState<any>({})
 
-  const onSubmit = (questionKey: string) => () => {
+  const onSubmit = (questionKey: string) => (value: any) => {
+    setAnswers({ ...answers, [questionKey]: value })
+    const { ident, uni } = answers
+    if (ident && uni) {
+      console.log('submit', questionKey)
+    }
     let subInd = questions.findIndex(({ key }) => key === questionKey)
-    if (subInd === 0) setIdent(true)
     if (subInd < questions.length - 1) setActive(subInd + 1)
     else {
       document.querySelector('#root').scrollBy({ top: 1 })
@@ -75,7 +80,12 @@ export default function Survey() {
 
   return (
     <>
-      {(ident ? questions : questions.slice(0, 1)).map((question, i) => (
+      {(!answers.ident
+        ? questions.slice(0, 1)
+        : !answers.uni
+        ? questions.slice(0, 2)
+        : questions
+      ).map((question, i) => (
         <Question
           key={question.key}
           question={question}
@@ -83,7 +93,7 @@ export default function Survey() {
           active={i === active}
         />
       ))}
-      {ident && <Done />}
+      {answers.ident && answers.uni && <Done />}
     </>
   )
 }

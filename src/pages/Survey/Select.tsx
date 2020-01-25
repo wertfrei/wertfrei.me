@@ -12,7 +12,7 @@ interface Props {
 
 export default function Select({
   answers = [],
-  placeholder = 'language',
+  placeholder,
   focus = false,
   onChange,
   blockNext,

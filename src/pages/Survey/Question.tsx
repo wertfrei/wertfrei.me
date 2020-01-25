@@ -8,12 +8,13 @@ import context from '~/src/context'
 
 interface Props {
   active?: boolean
-  onSubmit(): void
+  onSubmit(value: any): void
   question: {
     question: string
     key: string
     answers: string[]
     unit?: string
+    placeholder?: string
   }
 }
 
@@ -25,7 +26,7 @@ export default function Question({ question, onSubmit, active }: Props) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    onSubmit()
+    onSubmit(value)
   }
 
   const type = !question.answers
@@ -61,6 +62,7 @@ export default function Question({ question, onSubmit, active }: Props) {
         {type === 'select' && (
           <Select
             answers={question.answers}
+            placeholder={question.placeholder}
             focus={active}
             onChange={setValue}
             blockNext={v => {
