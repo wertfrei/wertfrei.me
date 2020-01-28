@@ -10,8 +10,8 @@ import strs from './strings.json'
 import './styles/master.scss'
 
 const query = gql`
-  query fetchData($language: Language) {
-    questions(language: $language) {
+  query fetchData($language: Language, $fake: Boolean) {
+    questions(language: $language, fake: $fake) {
       question
       type
       answers
@@ -57,22 +57,23 @@ function App() {
     api
       .query({
         query,
-        variables: { language: ctx.language.toUpperCase() },
+        variables: {
+          language: ctx.language.toUpperCase(),
+          fake: window.location.search.includes('fake'),
+        },
       })
       .then(({ data }) => {
-        const slides = data.questions
-          .map(({ question, answers, type, ...v }) =>
-            type === 'BINARY'
-              ? { question, answers, value: v.data.value }
-              : type === 'RADAR'
-              ? { question, values: prepRadarData(v.data) }
-              : {
-                  question,
-                  answers,
-                  ...v.data,
-                }
-          )
-          .reverse()
+        const slides = data.questions.map(({ question, answers, type, ...v }) =>
+          type === 'BINARY'
+            ? { question, answers, value: v.data.value }
+            : type === 'RADAR'
+            ? { question, values: prepRadarData(v.data) }
+            : {
+                question,
+                answers,
+                ...v.data,
+              }
+        )
         setCtx({ ...ctx, slides })
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps
