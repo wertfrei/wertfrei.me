@@ -91,14 +91,20 @@ function renderArea(
   const minX = Math.min(...values.map(([v]) => v))
   const maxX = Math.max(...values.map(([v]) => v))
   const maxY = Math.max(...values.map(([, v]) => v))
-  const complete = Array(maxX - minX)
+  const length = maxX - minX + 1
+  const complete = Array(length)
     .fill(0)
-    .map((_, i) => (values.find(([v]) => v === minX + i) || [0, 0])[1] / maxY)
+    .map(
+      (_, i) =>
+        (values.find(
+          ([v]) => v === minX + (i / (length - 1)) * (maxX - minX)
+        ) || [0, 0])[1] / maxY
+    )
   const boundX = (width / 5) * 3
   const boundY = (height / 5) * 2
   const vertices = [
     ...complete.map((y, x) => [
-      (x / complete.length) * boundX + (width - boundX),
+      (x / (complete.length - 1)) * boundX + (width - boundX),
       height - y * boundY,
     ]),
     [width, height],
