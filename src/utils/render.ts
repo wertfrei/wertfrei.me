@@ -71,7 +71,7 @@ function renderSingle(
 
 function renderRadar(values: number[], width: number, height: number): Polygon {
   const radius = (Math.min(width, height) * 0.75) / 2
-  const normalized = values.map(v => v / Math.max(...values))
+  const normalized = values.map(v => v / 1)
   const vertices = normalized.map((v, i) => [
     Math.sin((i / normalized.length) * (2 * Math.PI)) * v * radius + width / 2,
     Math.cos((i / normalized.length) * (2 * Math.PI)) * v * radius + height / 2,
