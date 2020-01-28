@@ -9,7 +9,9 @@
     "menu_impressum": "Impressum",
     "type_here": "Gib deine Antwork hier ein…",
     "thanks": "Danke fürs Mitmachen!",
-    "back": "zurück zur Startseite"
+    "back": "zurück zur Startseite",
+    "nodata": "Es haben noch nicht genug Leute die Umfrage beantwortet, um die Anonymität der Teilnehmer zu gewährleisten.",
+    "checkback": "Schau doch später noch mal vorbei und falls du das noch nicht getan hast, nimm bitte an der Umfrage teil."
   },
   "en": {
     "intro_student": "Students in Germany.",
@@ -21,6 +23,8 @@
     "menu_impressum": "impressum",
     "type_here": "Type your answer here…",
     "thanks": "Thanks for your participation!",
-    "back": "back to homepage"
+    "back": "back to homepage",
+    "nodata": "Not enough people have answered yet to ensure the anonymity of the participants.",
+    "checkback": "Please check back later and if you haven't yet, fill out the survey yourself."
   }
 }

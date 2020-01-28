@@ -3,6 +3,7 @@ import throttle from 'lodash/throttle'
 import { useWindowSize } from '../utils/hooks'
 import Intro from './Home/Intro'
 import Slide from './Home/Slide'
+import NoData from './Home/NoData'
 import DrawLayer from './Home/DrawLayer'
 import Menu from '../components/Menu'
 import context from '~/src/context'
@@ -16,9 +17,11 @@ export default function Home() {
     <>
       <Menu />
       <Intro />
-      {slides.map(({ question }, i) => (
-        <Slide slide={i} key={question} labelVisible={label} />
-      ))}
+      {slides.length > 0 &&
+        slides.map(({ question }, i) => (
+          <Slide slide={i} key={question} labelVisible={label} />
+        ))}
+      {slides.length === 0 && <NoData />}
       <DrawLayer
         slide={slide}
         label={label}
@@ -48,7 +51,7 @@ function useActiveSlide() {
     })
     return () => root.removeEventListener('scroll', handleScroll)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [active, width])
 
   return active === null ? -1 : active
 }
