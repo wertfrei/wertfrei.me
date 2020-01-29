@@ -43,7 +43,7 @@ function useActiveSlide() {
         width > 768
           ? ((root.scrollTop + window.innerHeight / 3) / window.innerHeight) | 0
           : ((root.scrollLeft + window.innerWidth / 2) / window.innerWidth) | 0
-      if (active !== slide) setActive(slide - 1)
+      if (active !== slide - 1) setActive(slide - 1)
     }, 1000 / 30)
 
     root.addEventListener('scroll', handleScroll, {
