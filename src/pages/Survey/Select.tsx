@@ -7,7 +7,7 @@ interface Props {
   placeholder?: string
   focus?: boolean
   onChange(v: string[] | string): void
-  blockNext(v: boolean): void
+  blockNext?(v: boolean): void
   limit?: number
 }
 
@@ -28,6 +28,7 @@ export default function Select({
   const [disabled, setDisabled] = useState(false)
   const listRef = useRef<HTMLUListElement>()
   const inputRef = useRef<HTMLInputElement>()
+  limit = limit || Infinity
 
   useEffect(() => {
     if (!limit) return
@@ -147,18 +148,19 @@ export default function Select({
           value={input}
           onChange={({ target }) => setInput(target.value)}
           onFocus={() => {
-            blockNext(true)
+            if (blockNext) blockNext(true)
             showSelect(true)
           }}
           onBlur={() => {
             setTimeout(() => {
               showSelect(false)
-              blockNext(false)
+              if (blockNext) blockNext(false)
             }, 100)
           }}
           onKeyDown={handleKey}
           ref={inputRef}
           disabled={disabled}
+          data-hidden={values.length >= limit}
         />
 
         {document.activeElement !== inputRef.current && (
@@ -231,6 +233,9 @@ const S = {
       padding: 0 0.5rem;
       color: #333;
       cursor: pointer;
+      overflow-x: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
 
       &[aria-selected='true'] {
         background-color: #eee;
@@ -248,6 +253,10 @@ const S = {
     &:focus {
       outline: none;
     }
+
+    &[data-hidden='true'] {
+      display: none;
+    }
   `,
 
   Tag: styled.div`
@@ -260,6 +269,10 @@ const S = {
     border: 1px solid #333;
     border-radius: 0.25rem;
     cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-right: auto;
 
     svg {
       transform: scale(0.3);

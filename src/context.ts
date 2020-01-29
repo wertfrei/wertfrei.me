@@ -20,7 +20,10 @@ interface Context {
   language: Language
   strings: typeof strs.en
   slides: Slide[]
+  universities: string[]
+  filter: string
   setLanguage(lang: Language): void
+  setFilter(uni: string): void
 }
 
 const language =
@@ -31,7 +34,10 @@ export const defaultCtx: Context = {
   language,
   strings: strs[language],
   slides: [],
+  universities: [],
+  filter: null,
   setLanguage: () => {},
+  setFilter: () => {},
 }
 
 export default createContext(defaultCtx)

@@ -1,11 +1,13 @@
 import React, { useState, useContext } from 'react'
 import Language from './Language'
+import Filter from './FilterSettings'
 import context from '~/src/context'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 export default function Menu() {
   const [open, setOpen] = useState(false)
+  const [filter, setFilter] = useState(false)
   const { strings } = useContext(context)
 
   return (
@@ -17,7 +19,9 @@ export default function Menu() {
           </li>
           <br />
           <li>
-            <a>{strings.menu_filter}</a>
+            <button onClick={() => setFilter(!filter)}>
+              {strings.menu_filter}
+            </button>
           </li>
           <br />
           <li>
@@ -28,6 +32,7 @@ export default function Menu() {
           </li>
         </S.List>
         <Language />
+        {filter && <Filter />}
       </S.Menu>
       <S.Hamburger onClick={() => setOpen(!open)}>
         <S.HamburgerBox>
@@ -55,6 +60,7 @@ const S = {
       opacity 0s linear var(--trans-time);
     will-change: clip-path;
     padding: 10rem 2rem;
+    box-sizing: border-box;
 
     &[data-state='open'] {
       clip-path: circle(150vmax at 50px 40px);
@@ -70,9 +76,29 @@ const S = {
 
     line-height: 3rem;
 
-    a {
+    a,
+    button {
       text-decoration: none;
       color: inherit;
+    }
+
+    button {
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      border: none;
+      padding: 0;
+      font-size: 2rem;
+      display: inline;
+      font-size: inherit;
+      line-height: inherit;
+      text-transform: inherit;
+      font: inherit;
+      cursor: pointer;
+      background-color: transparent;
+
+      &:focus {
+        outline: none;
+      }
     }
   `,
 

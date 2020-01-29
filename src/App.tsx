@@ -10,8 +10,8 @@ import strs from './strings.json'
 import './styles/master.scss'
 
 const query = gql`
-  query fetchData($language: Language, $fake: Boolean) {
-    questions(language: $language, fake: $fake) {
+  query fetchData($language: Language, $fake: Boolean, $uni: String) {
+    questions(language: $language, fake: $fake, uni: $uni) {
       question
       type
       answers
@@ -35,11 +35,20 @@ const query = gql`
   }
 `
 
+const uniQuery = gql`
+  query fetchUnis {
+    universities
+  }
+`
+
 function App() {
   const [ctx, setCtx] = useState({
     ...defaultCtx,
     setLanguage(language: Language) {
       setCtx({ ...ctx, language, strings: strs[language] })
+    },
+    setFilter(filter: string) {
+      setCtx({ ...ctx, filter })
     },
   })
 
@@ -60,6 +69,7 @@ function App() {
         variables: {
           language: ctx.language.toUpperCase(),
           fake: window.location.search.includes('fake'),
+          uni: ctx.filter || 'ALL',
         },
       })
       .then(({ data }) => {
@@ -77,7 +87,14 @@ function App() {
         setCtx({ ...ctx, slides })
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ctx.language])
+  }, [ctx.language, ctx.filter])
+
+  useEffect(() => {
+    if (ctx.universities.length) return
+    api.query({ query: uniQuery }).then(({ data }) => {
+      setCtx({ ...ctx, universities: data.universities })
+    })
+  }, [ctx])
 
   return (
     <Context.Provider value={ctx}>

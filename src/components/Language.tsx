@@ -32,7 +32,7 @@ const S = {
   Selection: styled.ul`
     position: absolute;
     top: 2rem;
-    right: calc(6rem);
+    right: 6rem;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
