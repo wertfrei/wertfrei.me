@@ -23,7 +23,9 @@ interface Context {
   setLanguage(lang: Language): void
 }
 
-const language = navigator.language.startsWith('de') ? 'de' : 'en'
+const language =
+  (localStorage.getItem('language') as Language) ||
+  (navigator.language.startsWith('de') ? 'de' : 'en')
 
 export const defaultCtx: Context = {
   language,

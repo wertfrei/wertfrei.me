@@ -14,7 +14,12 @@ export default function LanguageSelection() {
           key={lang}
           {...(lang === ctx.language
             ? { 'data-active': true }
-            : { onClick: () => ctx.setLanguage(lang) })}
+            : {
+                onClick: () => {
+                  ctx.setLanguage(lang)
+                  localStorage.setItem('language', lang)
+                },
+              })}
         >
           {lang}
         </li>
