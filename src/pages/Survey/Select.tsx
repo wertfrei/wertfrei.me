@@ -155,7 +155,7 @@ export default function Select({
             setTimeout(() => {
               showSelect(false)
               if (blockNext) blockNext(false)
-            }, 100)
+            }, 300)
           }}
           onKeyDown={handleKey}
           ref={inputRef}
