@@ -14,7 +14,7 @@ interface Props {
 export default function Select({
   answers = [],
   placeholder,
-  focus = false,
+  focus,
   onChange,
   blockNext,
   limit,
@@ -55,8 +55,18 @@ export default function Select({
   useEffect(() => {
     if (!inputRef.current) return
     if (focus !== (inputRef.current === document.activeElement)) {
-      if (!focus) inputRef.current.blur()
-      else if (values.length === 0) inputRef.current.focus()
+      if (focus === false) return inputRef.current.blur()
+      if (values.length > 0) return
+      if (
+        inputRef.current.parentElement.parentElement.parentElement.parentElement
+          .offsetTop <
+        document.querySelector('#root').scrollTop + window.innerHeight
+      )
+        return inputRef.current.focus()
+      inputRef.current.scrollIntoView()
+      setTimeout(() => {
+        inputRef.current.focus()
+      }, 600)
     }
   }, [inputRef, focus, values.length])
 

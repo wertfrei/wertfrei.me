@@ -15,7 +15,7 @@ export default function Input({
   id,
   placeholder,
   onChange,
-  focus = false,
+  focus,
   type,
   unit,
   spin,
@@ -26,8 +26,17 @@ export default function Input({
   useEffect(() => {
     if (!ref.current) return
     if (focus !== (ref.current === document.activeElement)) {
-      if (!focus) ref.current.blur()
-      else if (value.length === 0) ref.current.focus()
+      if (focus === false) return ref.current.blur()
+      if (value.length > 0) return
+      if (
+        ref.current.parentElement.parentElement.parentElement.offsetTop <
+        document.querySelector('#root').scrollTop + window.innerHeight
+      )
+        return ref.current.focus()
+      ref.current.scrollIntoView()
+      setTimeout(() => {
+        ref.current.focus()
+      }, 600)
     }
   }, [ref, focus, value.length])
 

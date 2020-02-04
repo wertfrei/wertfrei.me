@@ -56,7 +56,9 @@ export default function Survey() {
     let subInd = questions.findIndex(({ key }) => key === questionKey)
     if (subInd < questions.length - 1) setActive(subInd + 1)
     else {
-      document.querySelector('#root').scrollBy({ top: 1 })
+      document
+        .querySelector('#root')
+        .scrollBy(window.innerWidth > 768 ? { top: 1 } : { left: 1 })
       setActive(null)
     }
   }
@@ -79,10 +81,11 @@ export default function Survey() {
     const handleScroll = debounce(
       () => {
         const root = document.querySelector('#root')
-        const slide =
+        const slide = Math.round(
           window.innerWidth > 768
             ? root.scrollTop / window.innerHeight
             : root.scrollLeft / window.innerWidth
+        )
         if (active !== slide) setActive(slide)
       },
       100,

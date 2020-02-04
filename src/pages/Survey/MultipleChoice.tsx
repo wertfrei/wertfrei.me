@@ -17,8 +17,18 @@ export default function MultipleChoice({
 
   useEffect(() => {
     if (!ref.current) return
-    if (focus !== (ref.current === document.activeElement))
-      ref.current[focus ? 'focus' : 'blur']()
+    if (focus !== (ref.current === document.activeElement)) {
+      if (focus === false) return ref.current.blur()
+      if (
+        ref.current.parentElement.parentElement.offsetTop <
+        document.querySelector('#root').scrollTop + window.innerHeight
+      )
+        return ref.current.focus()
+      ref.current.scrollIntoView()
+      setTimeout(() => {
+        ref.current.focus()
+      }, 500)
+    }
   }, [ref, focus])
 
   const handleClick = (key: string) => (e?: SyntheticEvent) => {
@@ -26,7 +36,7 @@ export default function MultipleChoice({
     setValue(key)
     setTimeout(() => {
       onSelect(key === answers[0])
-    }, 200)
+    }, 600)
   }
 
   function handleKey(e: React.KeyboardEvent) {
