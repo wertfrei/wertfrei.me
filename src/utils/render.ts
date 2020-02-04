@@ -102,7 +102,7 @@ function renderArea(
     )
   const boundX = (width / 5) * 3
   const boundY = (height / 5) * 2
-  const vertices = [
+  let vertices = [
     ...complete.map((y, x) => [
       (x / (complete.length - 1)) * boundX + (width - boundX),
       height - y * boundY,
@@ -110,6 +110,25 @@ function renderArea(
     [width, height],
     [width - boundX, height],
   ]
+  for (let i = 1; i < vertices.length - 1; i++) {
+    if (
+      !(
+        vertices[i][1] === vertices[i - 1][1] &&
+        vertices[i][1] === vertices[i + 1][1]
+      )
+    )
+      continue
+    let last = i + 1
+    for (let e = i + 2; e < vertices.length; e++) {
+      if (vertices[e][1] === vertices[i][1]) last = e
+      else break
+    }
+    vertices = [
+      ...vertices.slice(0, i),
+      ...vertices.slice(last, vertices.length),
+    ]
+    i--
+  }
   return new Polygon(vertices as [number, number][])
 }
 
@@ -192,20 +211,22 @@ export function useRender(
       .map(polygon => ({
         polygon,
       }))
-      .map((p, i, polygons) => ({
-        ...p,
-        ...(i < polygons.length - 1 &&
-          [i, i + 1].every(n => polygons[n].polygon.vertices.length) && {
-            inter: interpolate(
-              ...[i, i + 1].map(i =>
-                polygons[i].polygon.vertices.map(({ x, y }) =>
-                  [x, y].map(v => (isNaN(v) ? 0 : v))
-                )
+      .map((p, i, polygons) => {
+        return {
+          ...p,
+          ...(i < polygons.length - 1 &&
+            [i, i + 1].every(n => polygons[n].polygon.vertices.length) && {
+              inter: interpolate(
+                ...[i, i + 1].map(i =>
+                  polygons[i].polygon.vertices.map(({ x, y }) =>
+                    [x, y].map(v => (isNaN(v) ? 0 : v))
+                  )
+                ),
+                { string: false }
               ),
-              { string: false }
-            ),
-          }),
-      }))
+            }),
+        }
+      })
   }, [width, height, slides])
 
   useEffect(() => {
