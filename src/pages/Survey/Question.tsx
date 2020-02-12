@@ -27,7 +27,12 @@ export default function Question({ question, onSubmit, active }: Props) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    onSubmit(value)
+    setTimeout(
+      () => {
+        onSubmit(value)
+      },
+      window.innerWidth <= 768 ? 500 : 0
+    )
   }
 
   const type = !question.answers
