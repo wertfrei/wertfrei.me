@@ -1,10 +1,11 @@
 {
   "de": {
-    "intro_student": "Studierende in Deutschland.",
+    "intro_student": "Von Studenten, für Studenten. Ganz wertfrei.",
     "intro_scroll": "Scroll durch und mach mit!",
     "intro_swipe": "Swipe durch und mach mit!",
     "menu_participate": "Mach mit!",
     "menu_filter": "Filteroptionen",
+    "menu_about": "Über",
     "menu_privacy": "Datenschutz",
     "menu_impressum": "Impressum",
     "type_here": "Gib deine Antwork hier ein…",
@@ -14,11 +15,12 @@
     "checkback": "Schau doch später noch mal vorbei und falls du das noch nicht getan hast, nimm bitte an der Umfrage teil."
   },
   "en": {
-    "intro_student": "Students in Germany.",
+    "intro_student": "From students, for students.",
     "intro_scroll": "Scroll through and participate!",
     "intro_swipe": "Swipe through and participate!",
     "menu_participate": "participate!",
     "menu_filter": "filter options",
+    "menu_about": "about",
     "menu_privacy": "privacy",
     "menu_impressum": "impressum",
     "type_here": "Type your answer here…",

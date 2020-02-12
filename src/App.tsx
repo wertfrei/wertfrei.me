@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 import api from './api'
 import Home from './pages/Home'
 import Survey from './pages/Survey'
+import About from './pages/About'
 import Context, { defaultCtx, Language } from './context'
 import strs from './strings.json'
 import './styles/master.scss'
@@ -113,6 +114,7 @@ function App() {
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/survey" exact component={Survey} />
+          <Route path="/about" exact component={About} />
         </Switch>
       </Router>
     </Context.Provider>

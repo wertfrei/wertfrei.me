@@ -25,6 +25,10 @@ export default function Menu() {
           </li>
           <br />
           <li>
+            <Link to="/about">{strings.menu_about}</Link>
+          </li>
+          <br />
+          <li>
             <a>{strings.menu_privacy}</a>
           </li>
           <li>
