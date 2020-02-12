@@ -30,17 +30,17 @@ const S = {
       (p1.y + (p2.y - p1.y) / 2) / devicePixelRatio}px;
 
     transform-origin: center;
-    transform: translateX(-50%) translateY(calc(-50% + 0.6vw)) rotateZ(-29.3deg);
+    transform: translateX(-50%) translateY(-50%) rotateZ(-29.3deg);
 
     @media (min-width: 560px) {
-      transform: translateX(-50%) translateY(calc(-50%)) rotateZ(-29.3deg);
+      transform: translateX(-50%) translateY(-50%) rotateZ(-29.3deg);
     }
 
     p {
       font-size: 4rem;
       font-size: min(4rem, 10vw);
-      line-height: 3rem;
-      line-height: min(3rem, 7.5vw);
+      line-height: 2.99rem;
+      line-height: min(2.99rem, 7.5vw);
       font-weight: bold;
       text-transform: uppercase;
       vertical-align: baseline;
