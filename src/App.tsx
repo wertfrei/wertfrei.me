@@ -8,6 +8,8 @@ import Survey from './pages/Survey'
 import About from './pages/About'
 import Privacy from './pages/Privacy'
 import Impressum from './pages/Impressum'
+import Menu from './components/Menu'
+import Logo from './components/Logo'
 import Context, { defaultCtx, Language } from './context'
 import strs from './strings.json'
 import './styles/master.scss'
@@ -113,6 +115,8 @@ function App() {
   return (
     <Context.Provider value={ctx}>
       <Router>
+        <Menu />
+        <Logo />
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/survey" exact component={Survey} />

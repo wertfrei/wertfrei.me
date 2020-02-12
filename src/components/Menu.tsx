@@ -13,7 +13,11 @@ export default function Menu() {
   return (
     <>
       <S.Menu data-state={open ? 'open' : 'closed'}>
-        <S.List>
+        <S.List
+          onClick={({ target }) => {
+            if (target.nodeName === 'A') setOpen(false)
+          }}
+        >
           <li>
             <Link to="/survey">{strings.menu_participate}</Link>
           </li>

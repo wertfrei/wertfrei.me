@@ -39,9 +39,10 @@ export default function About() {
 
 const S = {
   About: styled.div`
-    padding: 3rem;
+    padding: 2rem;
+    margin-top: 5rem;
+    height: calc(100vh - 5rem);
     width: 100vw;
-    height: 100vh;
     overflow-y: auto;
 
     @media (max-width: 768px) {
@@ -55,6 +56,7 @@ const S = {
     h3 {
       font-weight: bold;
       margin-bottom: 1rem;
+      font-size: 1.25rem;
 
       &:not(:first-of-type) {
         margin-top: 2rem;

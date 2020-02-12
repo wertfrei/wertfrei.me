@@ -292,9 +292,10 @@ export default function Privacy() {
 
 const S = {
   Privacy: styled.div`
-    padding: 1rem 3rem;
+    padding: 1rem 2rem;
+    margin-top: 5rem;
+    height: calc(100vh - 5rem);
     width: 100vw;
-    height: 100vh;
     overflow-y: auto;
 
     @media (max-width: 768px) {

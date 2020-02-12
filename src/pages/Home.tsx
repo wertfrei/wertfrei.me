@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react'
 import throttle from 'lodash/throttle'
 import { useWindowSize } from '../utils/hooks'
-import Intro from './Home/Intro'
 import Slide from './Home/Slide'
 import NoData from './Home/NoData'
 import DrawLayer from './Home/DrawLayer'
-import Menu from '../components/Menu'
-import Logo from '../components/Logo'
+import Intro from './Home/Intro'
 import context from '~/src/context'
 
 export default function Home() {
@@ -16,8 +14,6 @@ export default function Home() {
 
   return (
     <>
-      <Menu />
-      <Logo />
       <Intro />
       {slides.length > 0 &&
         slides.map(({ question }, i) => (
