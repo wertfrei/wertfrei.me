@@ -1,21 +1,30 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
+import strings from '~/src/strings.json'
+import context from '~/src/context'
 
 export default function Impressum() {
+  const { language } = useContext(context)
+
   return (
     <S.Impressum>
       <h1>Impressum</h1>
-      <h2>Dienstanbieter</h2>
+      <h2>{strings[language].imp_serv}</h2>
       <p>Anastasia Wagner &amp; Jonas Bullinger</p>
       <p>Prinz-Ferdinand-Straße 101</p>
       <p>47798 Krefeld</p>
-      <p>Deutschland</p>
-      <h2>Kontaktmöglichkeiten</h2>
+      <p>{strings[language].germany}</p>
+      <h2>{strings[language].imp_contact}</h2>
       <p>
         <b>Email:</b> jonas.bullinger@hs-niederrhein.de
       </p>
       <p>
         <b>Telefon:</b> +49 15735306603
+      </p>
+      <h2>{strings[language].imp_implementation}</h2>
+      <p>Mathis Bullinger</p>
+      <p>
+        <b>Email:</b> mathis@bullinger.dev
       </p>
     </S.Impressum>
   )

@@ -12,7 +12,11 @@
     "thanks": "Danke fürs Mitmachen!",
     "back": "zurück zur Startseite",
     "nodata": "Es haben noch nicht genug Leute die Umfrage beantwortet, um die Anonymität der Teilnehmer zu gewährleisten.",
-    "checkback": "Schau doch später noch mal vorbei und falls du das noch nicht getan hast, nimm bitte an der Umfrage teil."
+    "checkback": "Schau doch später noch mal vorbei und falls du das noch nicht getan hast, nimm bitte an der Umfrage teil.",
+    "imp_serv": "Dienstanbieter",
+    "germany": "Deutschland",
+    "imp_contact": "Kontaktmöglichkeit",
+    "imp_implementation": "Implementierung"
   },
   "en": {
     "intro_student": "From students, for students.",
@@ -27,6 +31,10 @@
     "thanks": "Thanks for your participation!",
     "back": "back to homepage",
     "nodata": "Not enough people have answered yet to ensure the anonymity of the participants.",
-    "checkback": "Please check back later and if you haven't already done so, please fill out the survey yourself."
+    "checkback": "Please check back later and if you haven't already done so, please fill out the survey yourself.",
+    "imp_serv": "Service Provider",
+    "germany": "Germany",
+    "imp_contact": "Contact",
+    "imp_implementation": "Implementation"
   }
 }
