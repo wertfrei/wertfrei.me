@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "alias": "wertfrei.me",
   "routes": [
     {
       "handle": "filesystem"
