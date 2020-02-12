@@ -4,7 +4,12 @@ import { Link } from 'react-router-dom'
 
 export default function Logo() {
   return (
-    <S.Logo to="/">
+    <S.Logo
+      to="/"
+      onClick={() =>
+        document.querySelector('#root').scrollTo({ top: 0, left: 0 })
+      }
+    >
       <svg
         version="1.1"
         id="Ebene_1"
