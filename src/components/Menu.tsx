@@ -29,7 +29,7 @@ export default function Menu() {
           </li>
           <br />
           <li>
-            <a>{strings.menu_privacy}</a>
+            <Link to="/privacy">{strings.menu_privacy}</Link>
           </li>
           <li>
             <a>{strings.menu_impressum}</a>

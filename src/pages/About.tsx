@@ -40,6 +40,13 @@ export default function About() {
 const S = {
   About: styled.div`
     padding: 3rem;
+    width: 100vw;
+    height: 100vh;
+    overflow-y: auto;
+
+    @media (max-width: 768px) {
+      padding: 1rem;
+    }
 
     * {
       line-height: 150%;

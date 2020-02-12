@@ -6,6 +6,7 @@ import api from './api'
 import Home from './pages/Home'
 import Survey from './pages/Survey'
 import About from './pages/About'
+import Privacy from './pages/Privacy'
 import Context, { defaultCtx, Language } from './context'
 import strs from './strings.json'
 import './styles/master.scss'
@@ -115,6 +116,7 @@ function App() {
           <Route path="/" exact component={Home} />
           <Route path="/survey" exact component={Survey} />
           <Route path="/about" exact component={About} />
+          <Route path="/privacy" exact component={Privacy} />
         </Switch>
       </Router>
     </Context.Provider>
