@@ -85,6 +85,10 @@ const S = {
 
     line-height: 3rem;
 
+    li:first-child {
+      color: var(--cl-red);
+    }
+
     a,
     button {
       text-decoration: none;

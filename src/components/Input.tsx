@@ -18,7 +18,7 @@ export default function Input({
   focus,
   type,
   unit,
-  spin,
+  spin = false,
 }: Props) {
   const [value, setValue] = useState('')
   const ref = useRef<HTMLInputElement>()
