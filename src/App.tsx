@@ -73,7 +73,7 @@ function App() {
         },
       })
       .then(({ data }) => {
-        const slides = data.questions.map(({ question, answers, type, ...v }) =>
+        let slides = data.questions.map(({ question, answers, type, ...v }) =>
           type === 'BINARY'
             ? { question, answers, value: v.data.value }
             : type === 'RADAR'
@@ -84,6 +84,17 @@ function App() {
                 ...v.data,
               }
         )
+        const firstSlide = slides.find(
+          ({ value }) =>
+            value ===
+            Math.max(
+              ...slides
+                .filter(({ value }) => value < 0.95)
+                .map(({ value }) => value)
+            )
+        )
+        if (firstSlide)
+          slides = [firstSlide, ...slides.filter(slide => slide !== firstSlide)]
         setCtx({ ...ctx, slides })
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps
