@@ -51,5 +51,19 @@ function useActiveSlide() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active, width])
 
+  useEffect(() => {
+    const root = document.getElementById('root')
+    const handleKey = ({ code, metaKey }) => {
+      if (!code.startsWith('Arrow') || metaKey) return
+      root.scrollBy({
+        [window.innerWidth > 768 ? 'top' : 'right']:
+          window.innerHeight * (/Down|Right$/.test(code) ? 1 : -1),
+        behavior: 'smooth',
+      })
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  })
+
   return active === null ? -1 : active
 }
