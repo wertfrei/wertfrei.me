@@ -28,12 +28,13 @@ export default function Input({
     if (focus !== (ref.current === document.activeElement)) {
       if (focus === false) return ref.current.blur()
       if (value.length > 0) return
+      const slide = ref.current.parentElement.parentElement.parentElement
       if (
-        ref.current.parentElement.parentElement.parentElement.offsetTop <
+        slide.offsetTop <
         document.querySelector('#root').scrollTop + window.innerHeight
       )
         return ref.current.focus()
-      ref.current.scrollIntoView()
+      slide.scrollIntoView()
       setTimeout(() => {
         ref.current.focus()
       }, 600)

@@ -20,7 +20,13 @@ export default function DrawLayer({ slide, label, onToggleLabel }: Props) {
 
   useEffect(() => {
     const onClick = () => {
-      if (slide >= 0) onToggleLabel(!label)
+      if ((document.querySelector('#root') as any).dataset.menu === 'true')
+        return
+      setTimeout(() => {
+        if ((document.querySelector('#root') as any).dataset.menu === 'true')
+          return
+        if (slide >= 0) onToggleLabel(!label)
+      }, 100)
     }
     document.getElementById('root').addEventListener('click', onClick)
     return () =>

@@ -57,13 +57,14 @@ export default function Select({
     if (focus !== (inputRef.current === document.activeElement)) {
       if (focus === false) return inputRef.current.blur()
       if (values.length > 0) return
-      if (
+      const slide =
         inputRef.current.parentElement.parentElement.parentElement.parentElement
-          .offsetTop <
+      if (
+        slide.offsetTop <
         document.querySelector('#root').scrollTop + window.innerHeight
       )
         return inputRef.current.focus()
-      inputRef.current.scrollIntoView()
+      slide.scrollIntoView()
       setTimeout(() => {
         inputRef.current.focus()
       }, 600)

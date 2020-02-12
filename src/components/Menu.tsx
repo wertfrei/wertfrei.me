@@ -38,7 +38,12 @@ export default function Menu() {
         <Language />
         {filter && <Filter />}
       </S.Menu>
-      <S.Hamburger onClick={() => setOpen(!open)}>
+      <S.Hamburger
+        onClick={() => {
+          ;(document.querySelector('#root') as any).dataset.menu = !open
+          setOpen(!open)
+        }}
+      >
         <S.HamburgerBox>
           <S.HamburgerInner data-state={open ? 'open' : 'closed'} />
         </S.HamburgerBox>
@@ -108,7 +113,7 @@ const S = {
 
   Hamburger: styled.button`
     position: fixed;
-    z-index: 1001;
+    z-index: 5000;
     left: 1rem;
     top: 1rem;
     -moz-appearance: none;

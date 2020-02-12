@@ -91,7 +91,7 @@ function renderArea(
   const minX = Math.min(...values.map(([v]) => v))
   const maxX = Math.max(...values.map(([v]) => v))
   const maxY = Math.max(...values.map(([, v]) => v))
-  const length = maxX - minX + 1
+  const length = Math.round(maxX - minX + 1)
   const complete = Array(length)
     .fill(0)
     .map(

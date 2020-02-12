@@ -19,12 +19,13 @@ export default function MultipleChoice({
     if (!ref.current) return
     if (focus !== (ref.current === document.activeElement)) {
       if (focus === false) return ref.current.blur()
+      const slide = ref.current.parentElement.parentElement
       if (
-        ref.current.parentElement.parentElement.offsetTop <
+        slide.offsetTop <
         document.querySelector('#root').scrollTop + window.innerHeight
       )
         return ref.current.focus()
-      ref.current.scrollIntoView()
+      slide.scrollIntoView()
       setTimeout(() => {
         ref.current.focus()
       }, 500)
