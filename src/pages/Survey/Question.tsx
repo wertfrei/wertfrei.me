@@ -5,6 +5,7 @@ import MultipleChoice from './MultipleChoice'
 import Select from './Select'
 import strings from '~/src/strings.json'
 import context from '~/src/context'
+import Arrow from '~/src/components/Arrow'
 
 interface Props {
   active?: boolean
@@ -17,9 +18,17 @@ interface Props {
     placeholder?: string
     limit?: number
   }
+  hasPrevious?: boolean
+  hasNext?: boolean
 }
 
-export default function Question({ question, onSubmit, active }: Props) {
+export default function Question({
+  question,
+  onSubmit,
+  active,
+  hasPrevious = true,
+  hasNext = true,
+}: Props) {
   const { language } = useContext(context)
   const [value, setValue] = useState<string | string[] | number>(null)
   const [blockNext, setBlockNext] = useState(false)
@@ -43,9 +52,26 @@ export default function Question({ question, onSubmit, active }: Props) {
     ? 'binary'
     : 'select'
 
+  const showOk =
+    value !== undefined &&
+    value !== null &&
+    (Array.isArray(value) ? value : value.toString()).length > 0 &&
+    !blockNext
   return (
     <S.Screen>
-      <S.Question onSubmit={handleSubmit}>
+      <S.Question onSubmit={handleSubmit} data-type={type}>
+        {hasPrevious && (
+          <Arrow
+            {...{
+              [window.innerWidth > 768 ? 'up' : 'left']: true,
+            }}
+            onClick={() =>
+              document.querySelector('#root').scrollBy({
+                [window.innerWidth > 768 ? 'top' : 'left']: -window.innerHeight,
+              })
+            }
+          />
+        )}
         <label htmlFor={question.key}>{question.question}</label>
         {type === 'free' && (
           <Input
@@ -54,7 +80,10 @@ export default function Question({ question, onSubmit, active }: Props) {
             onChange={setValue}
             focus={active}
             unit={question.unit}
-            {...(question.key !== 'ident' && { type: 'number', spin: true })}
+            {...(question.key !== 'ident' && {
+              type: 'number',
+              spin: true,
+            })}
           />
         )}
         {type === 'binary' && (
@@ -83,14 +112,7 @@ export default function Question({ question, onSubmit, active }: Props) {
         {(type === 'free' || type === 'select') && (
           <S.BtNext
             type="submit"
-            data-state={
-              value !== undefined &&
-              value !== null &&
-              (Array.isArray(value) ? value : value.toString()).length > 0 &&
-              !blockNext
-                ? 'active'
-                : 'hidden'
-            }
+            data-state={showOk ? 'active' : 'hidden'}
             ref={nextRef}
           >
             OK
@@ -98,6 +120,18 @@ export default function Question({ question, onSubmit, active }: Props) {
               <path d="M14.293.293l1.414 1.414L5 12.414.293 7.707l1.414-1.414L5 9.586z" />
             </svg>
           </S.BtNext>
+        )}
+        {hasNext && !showOk && !blockNext && (
+          <Arrow
+            {...{
+              [window.innerWidth > 768 ? 'down' : 'right']: true,
+            }}
+            onClick={() =>
+              document.querySelector('#root').scrollBy({
+                [window.innerWidth > 768 ? 'top' : 'left']: window.innerHeight,
+              })
+            }
+          />
         )}
       </S.Question>
     </S.Screen>
@@ -132,6 +166,32 @@ const S = {
 
     & > button {
       margin-top: 2rem;
+    }
+
+    ${Arrow.sc} {
+      left: 0;
+      position: absolute;
+
+      &:first-child {
+        top: -5rem;
+      }
+      &:last-child {
+        bottom: -1.5rem;
+
+        @media (max-width: 768px) {
+          bottom: -4rem;
+          left: calc(100% - 3.5rem);
+        }
+      }
+    }
+    &[data-type='binary'] {
+      ${Arrow.sc}:last-child {
+        bottom: -5rem;
+
+        @media (max-width: 768px) {
+          bottom: -6rem;
+        }
+      }
     }
   `,
 

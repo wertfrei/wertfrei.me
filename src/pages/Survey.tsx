@@ -68,12 +68,10 @@ export default function Survey() {
     api
       .query({ query, variables: { language: language.toUpperCase() } })
       .then(({ data }) =>
-        setQuestions(
-          [
-            ...data.survey.slice(2),
-            ...data.survey.slice(0, 2).reverse(),
-          ].reverse()
-        )
+        setQuestions([
+          ...data.survey.slice(0, 2),
+          ...shuffle(data.survey.slice(2)),
+        ])
       )
   }, [language])
 
@@ -105,15 +103,24 @@ export default function Survey() {
         : !answers.uni
         ? questions.slice(0, 2)
         : questions
-      ).map((question, i) => (
+      ).map((question, i, { length }) => (
         <Question
           key={question.key}
           question={question}
           onSubmit={onSubmit(question.key)}
           active={i === active}
+          hasPrevious={i > 0}
+          hasNext={i < length - 1}
         />
       ))}
       {answers.ident && answers.uni && <Done />}
     </>
   )
+}
+
+function shuffle<T>(arr: T[]): T[] {
+  const shuffled = []
+  while (arr.length)
+    shuffled.push(arr.splice((Math.random() * arr.length) | 0, 1)[0])
+  return shuffled
 }

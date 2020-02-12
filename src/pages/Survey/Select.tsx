@@ -236,6 +236,7 @@ const S = {
   Body: styled.ul`
     max-height: 15rem;
     overflow-y: auto;
+    background-color: #fff;
 
     li {
       height: 2.5rem;

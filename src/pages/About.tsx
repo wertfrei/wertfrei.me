@@ -15,10 +15,10 @@ export default function About() {
         grafisch interpretiert und verändern so das Abbild des Durchschnitts an
         deiner Hochschule, Stadt-, landes- oder sogar bundesweit.
       </p>
-      <p>
+      <S.Highlight>
         Das Projekt verfolgt keinerlei kommerzielles Interesse, sondern dient
         lediglich dem Selbstzweck.
-      </p>
+      </S.Highlight>
       <h3>User Guide</h3>
       <p>
         Bei der Eingabe deiner Angaben fragen wir deine Martrikelnummer ab, um
@@ -66,5 +66,9 @@ const S = {
     p {
       margin: 1rem 0;
     }
+  `,
+
+  Highlight: styled.p`
+    color: var(--cl-red);
   `,
 }

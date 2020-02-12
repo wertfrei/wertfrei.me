@@ -56,7 +56,11 @@ export default function Input({
           setValue(target.value)
           if (onChange)
             onChange(
-              type === 'number' ? parseFloat(target.value) : target.value
+              type === 'number'
+                ? !target.value && target.value !== '0'
+                  ? undefined
+                  : parseFloat(target.value)
+                : target.value
             )
         }}
         type={type}
