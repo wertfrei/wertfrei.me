@@ -32,7 +32,7 @@ export default function Menu() {
             <Link to="/privacy">{strings.menu_privacy}</Link>
           </li>
           <li>
-            <a>{strings.menu_impressum}</a>
+            <Link to="/impressum">{strings.menu_impressum}</Link>
           </li>
         </S.List>
         <Language />

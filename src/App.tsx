@@ -7,6 +7,7 @@ import Home from './pages/Home'
 import Survey from './pages/Survey'
 import About from './pages/About'
 import Privacy from './pages/Privacy'
+import Impressum from './pages/Impressum'
 import Context, { defaultCtx, Language } from './context'
 import strs from './strings.json'
 import './styles/master.scss'
@@ -117,6 +118,7 @@ function App() {
           <Route path="/survey" exact component={Survey} />
           <Route path="/about" exact component={About} />
           <Route path="/privacy" exact component={Privacy} />
+          <Route path="/impressum" exact component={Impressum} />
         </Switch>
       </Router>
     </Context.Provider>
