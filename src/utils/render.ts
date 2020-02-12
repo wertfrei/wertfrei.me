@@ -172,6 +172,13 @@ export function useRender(
     if (!ctx || polygons.length === 0) return
     ctx.clearRect(0, 0, width, height)
     ctx.fillStyle = '#ff0739'
+    if (
+      transition.start &&
+      !(transition.from === slide || transition.to === slide)
+    ) {
+      transition.start = null
+      return
+    }
 
     if (!transition.start) {
       renderPolygon(ctx, polygons[slide].polygon)
