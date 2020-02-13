@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import context from '~/src/context'
 import styled from 'styled-components'
+import Arrow from '~/src/components/Arrow'
 
 export default function Intro() {
   const { strings } = useContext(context)
@@ -11,6 +12,7 @@ export default function Intro() {
       <p>
         {window.innerWidth > 768 ? strings.intro_scroll : strings.intro_swipe}
       </p>
+      {window.innerWidth <= 769 && <Arrow right />}
     </S.Intro>
   )
 }
@@ -44,6 +46,12 @@ const S = {
         text-align: center;
         font-stretch: condensed;
       }
+    }
+
+    ${Arrow.sc} {
+      position: absolute;
+      bottom: 2rem;
+      left: calc(50% - 1.5rem);
     }
   `,
 }

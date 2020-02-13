@@ -15,18 +15,34 @@ export default function Area({ slide }) {
     setMaxY(Math.max(...values.map(([, v]) => v)))
   }, [values])
 
-  const cm =
+  let cm =
     Math.round(
       (((x - (window.innerWidth / 5) * 2) / ((window.innerWidth / 5) * 3)) *
         (values[values.length - 1][0] - values[0][0]) +
         values[0][0]) /
         step
     ) * step
-  const num = ((slides[slide].values as [number, number][]).find(
-    ([v]) => v === cm
-  ) || [0, 0])[1]
 
-  if (x < (window.innerWidth / 5) * 2) return null
+  let num =
+    x <= (window.innerWidth / 5) * 2
+      ? 0
+      : ((slides[slide].values as [number, number][]).find(
+          ([v]) => v === cm
+        ) || [0, 0])[1]
+
+  let posX =
+    (window.innerWidth / 5) * 2 +
+    ((cm - slides[slide].values[0][0]) /
+      ((slides[slide].values as [number, number][]).slice(-1)[0][0] -
+        slides[slide].values[0][0])) *
+      ((window.innerWidth / 5) * 3)
+
+  if (x < (window.innerWidth / 5) * 2) {
+    cm = slides[slide].values[0][1]
+    num = cm
+    posX = (window.innerWidth / 5) * 2
+  }
+
   return (
     <>
       <S.Label>
@@ -36,7 +52,7 @@ export default function Area({ slide }) {
           {unit}
         </span>
       </S.Label>
-      <S.Cursor hidden pos={x} normY={num / maxY} />
+      <S.Cursor hidden pos={posX} normY={num / maxY} />
     </>
   )
 }
@@ -48,15 +64,38 @@ const S = {
       top: `${window.innerHeight - normY * ((window.innerHeight / 5) * 2)}px`,
     },
   }))`
-    position: absolute;
+    position: relative;
+    z-index: 2;
     display: block;
     --crs-size: 0.8rem;
     width: var(--crs-size);
     height: var(--crs-size);
-    border-radius: calc(var(--crs-size) / 2);
     transform: translateX(-50%) translateY(-50%);
-    background-color: #fff;
-    border: 1.5px solid var(--cl-red);
+
+    &::before {
+      content: '';
+      position: absolute;
+      display: block;
+      width: 1px;
+      top: -100vh;
+      left: calc(50% + 1px);
+      height: 200vh;
+      background-color: var(--cl-black);
+      opacity: 0.5;
+    }
+
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: #fff;
+      border: 1.5px solid var(--cl-red);
+    }
   `,
 
   Label: styled.p`
